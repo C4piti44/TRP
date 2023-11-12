@@ -1,5 +1,4 @@
 from commands2 import Command
-from commands2.button import JoystickButton
 from Constants import OIConstants
 from Subsytem import SwerveSubsystem
 import commands2
@@ -26,8 +25,7 @@ class RobotContainer:
         self.configure_button_bindings()
 
     def configure_button_bindings(self):
-        JoystickButton(self.driverController, 2).whenPressed(lambda: self.swerveSubsystem.zeroHeading())
-
+        pass
     def get_autonomous_command(self) -> Command:
         pass
 

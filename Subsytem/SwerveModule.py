@@ -10,7 +10,7 @@ from Constants import (
     )
 
 class SwerveModule:
-    def __init__(self, driveMotorId, turningMotorId, driveMotorReversed, turningMotorReversed,absoluteEncoderId, absoluteEncoderOffset, absoluteEncoderReversed):
+    def __init__(self, driveMotorId, turningMotorId, driveMotorReversed, turningMotorReversed,absoluteEncoderId, absoluteEncoderOffset, absoluteEncoderReversed) -> None:
         self.absoluteEncoderOffsetRad = absoluteEncoderOffset
         self.absoluteEncoderReversed = absoluteEncoderReversed
         self.absoluteEncoder = AnalogInput(absoluteEncoderId)
@@ -34,31 +34,32 @@ class SwerveModule:
 
         self.resetEncoders()
 
-    def getDrivePosition(self):
+    def getDrivePosition(self) -> float:
         return self.driveEncoder.getPosition()
 
-    def getTurningPosition(self):
+    def getTurningPosition(self) -> float:
         return self.turningEncoder.getPosition()
 
-    def getDriveVelocity(self):
+    def getDriveVelocity(self) -> float:
         return self.driveEncoder.getVelocity()
 
-    def getTurningVelocity(self):
+    def getTurningVelocity(self) -> float:
         return self.turningEncoder.getVelocity()
 
-    def getAbsoluteEncoderRad(self):
+    def getAbsoluteEncoderRad(self) -> float:
         angle = self.absoluteEncoder.getVoltage() / 5.0
         angle *= 2.0 * math.pi
         angle -= self.absoluteEncoderOffsetRad
         return angle * (-1.0 if self.absoluteEncoderReversed else 1.0)
 
-    def resetEncoders(self):
+    def resetEncoders(self) -> None:
         self.driveEncoder.setPosition(0)
         self.turningEncoder.setPosition(self.getAbsoluteEncoderRad())
 
     def getState(self) -> SwerveModuleState:
         return SwerveModuleState(self.getDriveVelocity(), Rotation2d(self.getTurningPosition()))
-    def setDesiredState(self, state:SwerveModuleState):
+    
+    def setDesiredState(self, state:SwerveModuleState) -> None:
         if abs(SwerveModuleState(state).speed) < 0.001:
             self.stop()
             return
@@ -66,6 +67,6 @@ class SwerveModule:
         self.driveMotor.set(state.speed / DriveConstants.kPhysicalMaxSpeedMetersPerSecond)
         self.turningMotor.set(self.turningPidController.calculate(self.getTurningPosition(), state.angle.getRadians()))
 
-    def stop(self):
+    def stop(self) -> None:
         self.driveMotor.set(0)
         self.turningMotor.set(0)

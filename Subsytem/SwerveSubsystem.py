@@ -13,7 +13,7 @@ from Constants import (
 from Subsytem.SwerveModule import SwerveModule
 
 class SwerveSubsystem(SubsystemBase):
-    def __init__(self):
+    def __init__(self) -> None:
         self.xLimiter = filter.SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond)
         self.yLimiter = filter.SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond)
         self.tLimiter = filter.SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond)
@@ -61,22 +61,22 @@ class SwerveSubsystem(SubsystemBase):
         self.gyro = AHRS(SPI.Port.kMXP)
         self.odometer = SwerveDrive4Odometry(DriveConstants.kDriveKinematics, Rotation2d(0))
 
-    def zeroHeading(self):
+    def zeroHeading(self) -> None:
         self.gyro.reset()
 
-    def getHeading(self):
+    def getHeading(self) -> float:
         return self.gyro.getAngle() % 360
 
-    def getRotation2d(self):
+    def getRotation2d(self) -> Rotation2d:
         return Rotation2d.fromDegrees(self.getHeading())
 
     def getPose(self) -> Pose2d:
         return self.odometer.getPose()
 
-    def resetOdometry(self, pose:Pose2d):
+    def resetOdometry(self, pose:Pose2d) -> None:
         self.odometer.resetPosition(pose, self.getRotation2d())
 
-    def periodic(self):
+    def periodic(self) -> None:
         self.odometer.update(
             self.getRotation2d(),
             self.frontLeft.getState(),
@@ -85,20 +85,20 @@ class SwerveSubsystem(SubsystemBase):
             self.backRight.getState()
         )
 
-    def stopModules(self):
+    def stopModules(self) -> None:
         self.frontLeft.stop()
         self.frontRight.stop()
         self.backLeft.stop()
         self.backRight.stop()
 
-    def setModuleStates(self, desiredStates):
+    def setModuleStates(self, desiredStates) -> None:
         SwerveDrive4Kinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond)
         self.frontLeft.setDesiredState(desiredStates[0])
         self.frontRight.setDesiredState(desiredStates[1])
         self.backLeft.setDesiredState(desiredStates[2])
         self.backRight.setDesiredState(desiredStates[3])
 
-    def drive(self,xSpeed:float, ySpeed:float, tSpeed:float, fieldOriented:bool):
+    def drive(self,xSpeed:float, ySpeed:float, tSpeed:float, fieldOriented:bool) -> None:
         xSpeed = xSpeed if abs(xSpeed) > OIConstants.kDeadband else 0.0
         ySpeed = ySpeed if abs(ySpeed) > OIConstants.kDeadband else 0.0
         tSpeed = tSpeed if abs(tSpeed) > OIConstants.kDeadband else 0.0
