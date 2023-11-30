@@ -1,8 +1,8 @@
 from wpimath.controller import PIDController
 from rev import CANSparkMax, CANSparkMaxLowLevel
-from wpilib import AnalogInput, PIDController
+from wpilib import AnalogInput
 from wpimath.geometry import Rotation2d
-from wpimath.kinematics import SwerveModuleState
+from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
 import math
 from Constants import (
     ModuleConstants,
@@ -30,9 +30,15 @@ class SwerveModule:
         self.turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec)
 
         self.turningPidController = PIDController(ModuleConstants.kPTurning, 0, 0)
-        self.turningPidController.enableContinuousInput(-math.pi, math.pis)
+        self.turningPidController.enableContinuousInput(-math.pi, math.pi)
 
         self.resetEncoders()
+
+    def get_position(self) -> SwerveModulePosition:
+        return SwerveModulePosition(
+            self.getDrivePosition()*2*math.pi*ModuleConstants.kWheelDiameterMeters,
+            Rotation2d(self.getAbsoluteEncoderRad())
+        )
 
     def getDrivePosition(self) -> float:
         return self.driveEncoder.getPosition()

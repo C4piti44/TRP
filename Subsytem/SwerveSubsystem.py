@@ -1,11 +1,11 @@
 from wpilib import SPI
 from wpimath import filter
 from navx import AHRS
+import wpilib
 
 from wpimath.geometry import Pose2d, Rotation2d
 from wpimath.kinematics import SwerveDrive4Odometry, SwerveModuleState, SwerveDrive4Kinematics, ChassisSpeeds
 from commands2 import SubsystemBase
-import SwerveModule
 from Constants import (
     DriveConstants,
     OIConstants
@@ -57,10 +57,11 @@ class SwerveSubsystem(SubsystemBase):
             DriveConstants.kBackRightDriveAbsoluteEncoderOffsetRad,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed
         )
-
-        self.gyro = AHRS(SPI.Port.kMXP)
-        self.odometer = SwerveDrive4Odometry(DriveConstants.kDriveKinematics, Rotation2d(0))
-
+        #self.gyro = AHRS(SPI.Port.kMXP)
+        #self.gyro = wpilib.ADXRS450_Gyro
+        self.gyro = wpilib.ADXRS450_Gyro(wpilib.SPI.Port.kOnboardCS0)
+        self.odometer = SwerveDrive4Odometry(DriveConstants.kDriveKinematics, Rotation2d.fromDegrees(self.gyro.getAngle()), [self.frontLeft.get_position(), self.frontRight.get_position(), self.backLeft.get_position(), self.backRight.get_position()])
+        
     def zeroHeading(self) -> None:
         self.gyro.reset()
 
@@ -79,10 +80,10 @@ class SwerveSubsystem(SubsystemBase):
     def periodic(self) -> None:
         self.odometer.update(
             self.getRotation2d(),
-            self.frontLeft.getState(),
-            self.frontRight.getState(),
-            self.backLeft.getState(),
-            self.backRight.getState()
+            self.frontLeft.get_position(),
+            self.frontRight.get_position(),
+            self.backLeft.get_position(),
+            self.backRight.get_position()
         )
 
     def stopModules(self) -> None:

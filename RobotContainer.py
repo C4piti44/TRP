@@ -11,7 +11,6 @@ class RobotContainer:
         self.swerveSubsystem = SwerveSubsystem.SwerveSubsystem()
 
         self.driverController = commands2.button.CommandPS4Controller(OIConstants.kDriverControllerPort)
-
         commands2.CommandScheduler.setDefaultCommand(
             commands2.cmd.run(
                 lambda: self.swerveSubsystem.drive(
