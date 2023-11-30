@@ -2,13 +2,11 @@
 import wpilib
 import commands2
 from RobotContainer import RobotContainer
-from Subsytem import SwerveSubsystem
 
 class MyRobot(commands2.TimedCommandRobot):
     #robot
     def robotInit(self) -> None:
         self.container = RobotContainer()
-        SwerveSubsystem.SwerveSubsystem.zeroHeading()
     def robotPeriodic(self) -> None:
         commands2.CommandScheduler.getInstance().run()
     #autonomus
@@ -21,7 +19,7 @@ class MyRobot(commands2.TimedCommandRobot):
     def teleopInit(self) -> None:
         pass
     def teleopPeriodic(self) -> None:
-        pass
+        print(self.container.get_gyro())
     def testInit(self) -> None:
         commands2.CommandScheduler.getInstance().cancelAll()
 

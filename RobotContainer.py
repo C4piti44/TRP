@@ -11,22 +11,25 @@ class RobotContainer:
         self.swerveSubsystem = SwerveSubsystem.SwerveSubsystem()
 
         self.driverController = commands2.button.CommandPS4Controller(OIConstants.kDriverControllerPort)
-        commands2.CommandScheduler.setDefaultCommand(
+        self.driverController.cross().onFalse(
             commands2.cmd.run(
                 lambda: self.swerveSubsystem.drive(
                     self.driverController.getLeftX(),
                     self.driverController.getLeftY(),
                     self.driverController.getRightX(),
-                    self.driverController.getCrossButton()
+                    True,
                 )
             )
         )
+
         self.configure_button_bindings()
 
     def configure_button_bindings(self):
         pass
     def get_autonomous_command(self) -> Command:
         pass
+    def get_gyro(self) -> float:
+        return self.swerveSubsystem.get_angle()
 
 if __name__ == "__main__":
     # Instantiate RobotContainer and use its methods as needed

@@ -4,8 +4,9 @@ from navx import AHRS
 import wpilib
 
 from wpimath.geometry import Pose2d, Rotation2d
-from wpimath.kinematics import SwerveDrive4Odometry, SwerveModuleState, SwerveDrive4Kinematics, ChassisSpeeds
+from wpimath.kinematics import SwerveDrive4Odometry, SwerveDrive4Kinematics, ChassisSpeeds
 from commands2 import SubsystemBase
+import commands2
 from Constants import (
     DriveConstants,
     OIConstants
@@ -14,6 +15,8 @@ from Subsytem.SwerveModule import SwerveModule
 
 class SwerveSubsystem(SubsystemBase):
     def __init__(self) -> None:
+
+        commands2._impl.SubsystemBase.__init__(self)
         self.xLimiter = filter.SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond)
         self.yLimiter = filter.SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond)
         self.tLimiter = filter.SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond)
@@ -64,6 +67,9 @@ class SwerveSubsystem(SubsystemBase):
         
     def zeroHeading(self) -> None:
         self.gyro.reset()
+
+    def get_angle(self) -> float:
+        return self.gyro.getAngle()
 
     def getHeading(self) -> float:
         return self.gyro.getAngle() % 360
