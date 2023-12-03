@@ -3,20 +3,21 @@ from wpimath import units
 from wpimath.trajectory import TrapezoidProfile
 from wpimath.kinematics import SwerveDrive4Kinematics
 from wpimath.geometry import Translation2d
+import math
 
 class ModuleConstants:
     kWheelDiameterMeters = units.inchesToMeters(4)
-    kDriveMotorGearRatio = 1 / 5.8462
-    kTurningMotorGearRatio = 1 / 18.0
-    kDriveEncoderRot2Meter = kDriveMotorGearRatio * 3.141592653589793 * kWheelDiameterMeters
-    kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * 3.141592653589793
+    kDriveMotorGearRatio = 14/15
+    kTurningMotorGearRatio = 14/45
+    kDriveEncoderRot2Meter = kDriveMotorGearRatio * math.pi * kWheelDiameterMeters
+    kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * math.pi
     kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60
     kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60
     kPTurning = 0.5
 
 class DriveConstants:
-    kTrackWidth = units.inchesToMeters(21)
-    kWheelBase = units.inchesToMeters(25.5)
+    kTrackWidth = 0.59
+    kWheelBase = 0.59
     kDriveKinematics = SwerveDrive4Kinematics(
         Translation2d(kWheelBase / 2, -kTrackWidth / 2),
         Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -34,13 +35,13 @@ class DriveConstants:
     kFrontRightTurningMotorPort = 5
     kBackRightTurningMotorPort = 3
 
-    kFrontLeftTurningEncoderReversed = True
-    kBackLeftTurningEncoderReversed = True
-    kFrontRightTurningEncoderReversed = True
-    kBackRightTurningEncoderReversed = True
+    kFrontLeftTurningEncoderReversed = False
+    kBackLeftTurningEncoderReversed = False
+    kFrontRightTurningEncoderReversed = False
+    kBackRightTurningEncoderReversed =  False
 
-    kFrontLeftDriveEncoderReversed = True
-    kBackLeftDriveEncoderReversed = True
+    kFrontLeftDriveEncoderReversed = False
+    kBackLeftDriveEncoderReversed = False
     kFrontRightDriveEncoderReversed = False
     kBackRightDriveEncoderReversed = False
 
@@ -54,13 +55,13 @@ class DriveConstants:
     kFrontRightDriveAbsoluteEncoderReversed = False
     kBackRightDriveAbsoluteEncoderReversed = False
 
-    kFrontLeftDriveAbsoluteEncoderOffsetRad = -0.254
-    kBackLeftDriveAbsoluteEncoderOffsetRad = -1.252
-    kFrontRightDriveAbsoluteEncoderOffsetRad = -1.816
-    kBackRightDriveAbsoluteEncoderOffsetRad = -4.811
+    kFrontLeftDriveAbsoluteEncoderOffsetRad = 0
+    kBackLeftDriveAbsoluteEncoderOffsetRad = 0
+    kFrontRightDriveAbsoluteEncoderOffsetRad = 0
+    kBackRightDriveAbsoluteEncoderOffsetRad = 0
 
     kPhysicalMaxSpeedMetersPerSecond = 5
-    kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * 3.141592653589793
+    kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * math.pi
 
     kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 4
     kTeleDriveMaxAngularSpeedRadiansPerSecond = kPhysicalMaxAngularSpeedRadiansPerSecond / 4
@@ -71,15 +72,15 @@ class AutoConstants:
     kMaxSpeedMetersPerSecond = DriveConstants.kPhysicalMaxSpeedMetersPerSecond / 4
     kMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 10
     kMaxAccelerationMetersPerSecondSquared = 3
-    kMaxAngularAccelerationRadiansPerSecondSquared = 3.141592653589793 / 4
-    kPXController = 1.5
-    kPYController = 1.5
-    kPThetaController = 3
+    kMaxAngularAccelerationRadiansPerSecondSquared = math.pi / 4
+#    kPXController = 1.5
+#    kPYController = 1.5
+#    kPThetaController = 3
 
-    kThetaControllerConstraints = TrapezoidProfile.Constraints(
-        kMaxAngularSpeedRadiansPerSecond,
-        kMaxAngularAccelerationRadiansPerSecondSquared
-    )
+#    kThetaControllerConstraints = TrapezoidProfile.Constraints(
+#        kMaxAngularSpeedRadiansPerSecond,
+#        kMaxAngularAccelerationRadiansPerSecondSquared
+#    )
 
 class OIConstants:
     kDriverControllerPort = 0

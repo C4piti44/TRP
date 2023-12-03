@@ -122,3 +122,20 @@ class SwerveSubsystem(SubsystemBase):
 
         moduleState = DriveConstants.kDriveKinematics.toSwerveModuleStates(cSpeed)
         self.setModuleStates(moduleState)
+
+    def print_CANCoder_values(self):
+        print(f"Encoder 0: {str(self.frontLeft.getAbsoluteEncoderRad())}")
+        print(f"Encoder 1: {str(self.frontRight.getAbsoluteEncoderRad())}")
+        print(f"Encoder 2: {str(self.backLeft.getAbsoluteEncoderRad())}")
+        print(f"Encoder 3: {str(self.backRight.getAbsoluteEncoderRad())}")
+
+    def print_NEO_encoder_values(self):
+        print(f"Drive 0: {str(self.frontLeft.getDrivePosition())}")
+        print(f"Turn 0: {str(self.frontRight.getTurningPosition())}")
+        print(f"Drive 1: {str(self.backLeft.getDrivePosition())}")
+        print(f"Turn 1: {str(self.backRight.getTurningPosition())}")
+        print(f"Drive 2: {str(self.frontLeft.getDrivePosition())}")
+        print(f"Turn 2: {str(self.frontRight.getTurningPosition())}")
+        print(f"Drive 3: {str(self.backLeft.getDrivePosition())}")
+        print(f"Turn 3: {str(self.backRight.getTurningPosition())}")
+        

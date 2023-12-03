@@ -1,6 +1,6 @@
 from wpimath.controller import PIDController
 from rev import CANSparkMax, CANSparkMaxLowLevel
-from wpilib import AnalogInput
+from ctre.sensors import CANCoder, CANCoderConfiguration, SensorInitializationStrategy, SensorTimeBase
 from wpimath.geometry import Rotation2d
 from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
 import math
@@ -13,7 +13,7 @@ class SwerveModule:
     def __init__(self, driveMotorId, turningMotorId, driveMotorReversed, turningMotorReversed,absoluteEncoderId, absoluteEncoderOffset, absoluteEncoderReversed) -> None:
         self.absoluteEncoderOffsetRad = absoluteEncoderOffset
         self.absoluteEncoderReversed = absoluteEncoderReversed
-        self.absoluteEncoder = AnalogInput(absoluteEncoderId)
+        self.absoluteEncoder = CANCoder(absoluteEncoderId)
 
         self.driveMotor = CANSparkMax(driveMotorId, CANSparkMaxLowLevel.MotorType.kBrushless)
         self.turningMotor = CANSparkMax(turningMotorId, CANSparkMaxLowLevel.MotorType.kBrushless)
@@ -32,6 +32,7 @@ class SwerveModule:
         self.turningPidController = PIDController(ModuleConstants.kPTurning, 0, 0)
         self.turningPidController.enableContinuousInput(-math.pi, math.pi)
 
+        self.config_absolute_encoder()
         self.resetEncoders()
 
     def get_position(self) -> SwerveModulePosition:
@@ -53,8 +54,8 @@ class SwerveModule:
         return self.turningEncoder.getVelocity()
 
     def getAbsoluteEncoderRad(self) -> float:
-        angle = self.absoluteEncoder.getVoltage() / 5.0
-        angle *= 2.0 * math.pi
+        angle = self.absoluteEncoder.getAbsolutePosition()
+        angle *= (math.pi/180)
         angle -= self.absoluteEncoderOffsetRad
         return angle * (-1.0 if self.absoluteEncoderReversed else 1.0)
 
@@ -65,13 +66,23 @@ class SwerveModule:
     def getState(self) -> SwerveModuleState:
         return SwerveModuleState(self.getDriveVelocity(), Rotation2d(self.getTurningPosition()))
     
+    def config_absolute_encoder(self) -> None:
+        self.absoluteEncoder.configFactoryDefault()
+        swerve_can_coder_config = CANCoderConfiguration()
+        swerve_can_coder_config.sensorDirection = False
+        swerve_can_coder_config.initializationStrategy = (
+            SensorInitializationStrategy.BootToAbsolutePosition
+        )
+        swerve_can_coder_config.sensorTimeBase = SensorTimeBase.PerSecond
+        self.absoluteEncoder.configAllSettings(swerve_can_coder_config)
+
     def setDesiredState(self, state:SwerveModuleState) -> None:
         if abs(SwerveModuleState(state).speed) < 0.001:
             self.stop()
             return
         state = SwerveModuleState.optimize(state, self.getState().angle)
         self.driveMotor.set(state.speed / DriveConstants.kPhysicalMaxSpeedMetersPerSecond)
-        self.turningMotor.set(self.turningPidController.calculate(self.getTurningPosition(), state.angle.getRadians()))
+        self.turningMotor.set(self.turningPidController.calculate(self.getTurningPosition(), state.angle.radians()))
 
     def stop(self) -> None:
         self.driveMotor.set(0)

@@ -8,7 +8,7 @@ class MyRobot(commands2.TimedCommandRobot):
     def robotInit(self) -> None:
         self.container = RobotContainer()
     def robotPeriodic(self) -> None:
-        commands2.CommandScheduler.getInstance().run()
+        pass
     #autonomus
     def autonomousInit(self) -> None:
         pass
@@ -19,9 +19,9 @@ class MyRobot(commands2.TimedCommandRobot):
     def teleopInit(self) -> None:
         pass
     def teleopPeriodic(self) -> None:
-        print(self.container.get_gyro())
+        self.container.print_NEO_encoder()
     def testInit(self) -> None:
-        commands2.CommandScheduler.getInstance().cancelAll()
+        pass
 
 if __name__ == "__main__":
     wpilib.run(MyRobot)
