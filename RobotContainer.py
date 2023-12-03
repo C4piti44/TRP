@@ -16,7 +16,7 @@ class RobotContainer:
             self.swerveSubsystem.run(
                 lambda: SwerveSubsystem.drive(
                     self.swerveSubsystem,
-                    0.1,
+                    0,
                     0,
                     0
                 )

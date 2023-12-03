@@ -6,9 +6,21 @@ from wpimath.geometry import Translation2d
 import math
 
 class ModuleConstants:
+    
+    # Angle Motor PID Values
+    angle_kp = 0.6
+    angle_ki = 0.0
+    angle_kd = 12.0
+    angle_kf = 0.0
+    # Drive Motor PID Values
+    drive_kp = 0.1
+    drive_ki = 0.0
+    drive_kd = 0.0
+    drive_kf = 0.0
+
     kWheelDiameterMeters = units.inchesToMeters(4)
-    kDriveMotorGearRatio = 14/15
-    kTurningMotorGearRatio = 14/45
+    kDriveMotorGearRatio = 6.75
+    kTurningMotorGearRatio = 12
     kDriveEncoderRot2Meter = kDriveMotorGearRatio * math.pi * kWheelDiameterMeters
     kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * math.pi
     kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60

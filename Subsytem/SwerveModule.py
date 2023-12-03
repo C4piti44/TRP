@@ -1,5 +1,5 @@
 from wpimath.controller import PIDController
-from rev import CANSparkMax, CANSparkMaxLowLevel
+from rev import CANSparkMax, CANSparkMaxLowLevel, SparkMaxPIDController
 from ctre.sensors import CANCoder, CANCoderConfiguration, SensorInitializationStrategy, SensorTimeBase
 from wpimath.geometry import Rotation2d
 from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
@@ -46,7 +46,7 @@ class SwerveModule:
     def get_position(self) -> SwerveModulePosition:
         return SwerveModulePosition(
             self.getDrivePosition()*2*math.pi*ModuleConstants.kWheelDiameterMeters,
-            Rotation2d(self.getAbsoluteEncoderRad())
+            Rotation2d(self.getAbsoluteEncoder())
         )
 
     def getDrivePosition(self) -> float:
@@ -61,15 +61,15 @@ class SwerveModule:
     def getTurningVelocity(self) -> float:
         return self.turningEncoder.getVelocity()
 
-    def getAbsoluteEncoderRad(self) -> float:
+    def getAbsoluteEncoder(self) -> float:
         angle = self.absoluteEncoder.getAbsolutePosition()
         angle -= self.absoluteEncoderOffset
-        angle *= (math.pi/180)
+        #angle *= (math.pi/180)
         return angle * (-1.0 if self.absoluteEncoderReversed else 1.0)
 
     def resetEncoders(self) -> None:
         self.driveEncoder.setPosition(0)
-        self.turningEncoder.setPosition(self.getAbsoluteEncoderRad())
+        self.turningEncoder.setPosition(self.getAbsoluteEncoder())
 
     def getState(self) -> SwerveModuleState:
         return SwerveModuleState(self.getDriveVelocity(), Rotation2d(self.getTurningPosition()))
@@ -85,7 +85,7 @@ class SwerveModule:
         self.absoluteEncoder.configAllSettings(swerve_can_coder_config)
 
     def setDesiredState(self, state:SwerveModuleState) -> None:
-        if abs(state.speed) < 0.001:
+        if abs(state.speed) < 0.01:
             self.stop()
             return
         state = SwerveModuleState.optimize(state, self.getState().angle)

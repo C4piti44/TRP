@@ -20,7 +20,7 @@ class MyRobot(commands2.TimedCommandRobot):
     def teleopInit(self) -> None:
         pass
     def teleopPeriodic(self) -> None:
-        pass
+        self.container.swerveSubsystem.print_NEO_encoder_values()
     def testInit(self) -> None:
         pass
 

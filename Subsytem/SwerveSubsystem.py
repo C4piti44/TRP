@@ -66,7 +66,7 @@ class SwerveSubsystem(Subsystem):
         return self.gyro.getAngle() % 360
 
     def getRotation2d(self) -> Rotation2d:
-        return Rotation2d.fromDegrees(self.getHeading())
+        return Rotation2d.fromDegrees(self.gyro.getAngle())
 
     def getPose(self) -> Pose2d:
         return self.odometer.getPose()
@@ -112,12 +112,11 @@ class SwerveSubsystem(Subsystem):
         moduleState = DriveConstants.kDriveKinematics.toSwerveModuleStates(cSpeed)
         self.setModuleStates(moduleState)
 
-
     def print_CANCoder_values(self):
-        print(f"Encoder 0: {str(self.frontLeft.getAbsoluteEncoderRad())}")
-        print(f"Encoder 1: {str(self.frontRight.getAbsoluteEncoderRad())}")
-        print(f"Encoder 2: {str(self.backLeft.getAbsoluteEncoderRad())}")
-        print(f"Encoder 3: {str(self.backRight.getAbsoluteEncoderRad())}")
+        print(f"Encoder 0: {str(self.frontLeft.getAbsoluteEncoder())}")
+        print(f"Encoder 1: {str(self.frontRight.getAbsoluteEncoder())}")
+        print(f"Encoder 2: {str(self.backLeft.getAbsoluteEncoder())}")
+        print(f"Encoder 3: {str(self.backRight.getAbsoluteEncoder())}")
 
     def print_NEO_encoder_values(self):
         print(f"Drive 0: {str(self.frontLeft.getDrivePosition())}")
@@ -128,4 +127,6 @@ class SwerveSubsystem(Subsystem):
         print(f"Turn 2: {str(self.backRight.getTurningPosition())}")
         print(f"Drive 3: {str(self.frontRight.getDrivePosition())}")
         print(f"Turn 3: {str(self.frontRight.getTurningPosition())}")
-        
+    
+    def print_gyro_angle(self):
+        print(f"Gyro Angle(Deg): {str(self.gyro.getAngle())}")
