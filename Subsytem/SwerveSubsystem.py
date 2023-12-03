@@ -1,11 +1,8 @@
-from wpilib import SPI
-from wpimath import filter
-from navx import AHRS
 import wpilib
-
+import math
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.kinematics import SwerveDrive4Odometry, SwerveDrive4Kinematics, ChassisSpeeds
-from commands2 import SubsystemBase, Subsystem
+from commands2 import Subsystem
 import commands2
 from Constants import (
     DriveConstants,
@@ -15,14 +12,10 @@ from Subsytem.SwerveModule import SwerveModule
 
 class SwerveSubsystem(Subsystem):
     def __init__(self) -> None:
-        super.__init__()
+        commands2._impl.Subsystem.__init__(self)
 
         self.gyro = wpilib.ADXRS450_Gyro(wpilib.SPI.Port.kOnboardCS0)
-        self.odometer = SwerveDrive4Odometry(DriveConstants.kDriveKinematics, Rotation2d.fromDegrees(self.gyro.getAngle()), [self.frontLeft.get_position(), self.frontRight.get_position(), self.backLeft.get_position(), self.backRight.get_position()])
-        
-        self.xLimiter = filter.SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond)
-        self.yLimiter = filter.SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond)
-        self.tLimiter = filter.SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond)
+        self.zeroHeading()
         
         self.frontLeft:SwerveModule = SwerveModule(
             DriveConstants.kFrontLeftDriveMotorPort,
@@ -63,6 +56,7 @@ class SwerveSubsystem(Subsystem):
             DriveConstants.kBackRightDriveAbsoluteEncoderOffset,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed
         )
+        self.odometer = SwerveDrive4Odometry(DriveConstants.kDriveKinematics, Rotation2d.fromDegrees(self.gyro.getAngle()), [self.frontLeft.get_position(), self.frontRight.get_position(), self.backLeft.get_position(), self.backRight.get_position()])
         
         
     def zeroHeading(self) -> None:
@@ -72,7 +66,7 @@ class SwerveSubsystem(Subsystem):
         return self.gyro.getAngle() % 360
 
     def getRotation2d(self) -> Rotation2d:
-        return Rotation2d.fromDegrees(self.getHeading(self))
+        return Rotation2d.fromDegrees(self.getHeading())
 
     def getPose(self) -> Pose2d:
         return self.odometer.getPose()
@@ -102,21 +96,22 @@ class SwerveSubsystem(Subsystem):
         self.backLeft.setDesiredState(desiredStates[2])
         self.backRight.setDesiredState(desiredStates[3])
 
-    def drive(self, xSpeed:float, ySpeed:float, tSpeed:float, fieldOriented:bool = True) -> None:
+    def drive(self, xSpeed: float, ySpeed: float, tSpeed: float, fieldOriented: bool = True) -> None:
         xSpeed = xSpeed if abs(xSpeed) > OIConstants.kDeadband else 0.0
         ySpeed = ySpeed if abs(ySpeed) > OIConstants.kDeadband else 0.0
         tSpeed = tSpeed if abs(tSpeed) > OIConstants.kDeadband else 0.0
 
-        translation:Translation2d = Translation2d(xSpeed, ySpeed)
+        translation: Translation2d = Translation2d(xSpeed, ySpeed)
 
-        cSpeed:ChassisSpeeds
+        cSpeed: ChassisSpeeds
         if fieldOriented:
-            cSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(translation.X(),translation.Y(),tSpeed,self.getRotation2d(self))
+            cSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(translation.X(), translation.Y(), tSpeed, self.getRotation2d())
         else:
-            cSpeed = ChassisSpeeds(xSpeed,ySpeed,tSpeed)
+            cSpeed = ChassisSpeeds(xSpeed, ySpeed, tSpeed)
 
         moduleState = DriveConstants.kDriveKinematics.toSwerveModuleStates(cSpeed)
         self.setModuleStates(moduleState)
+
 
     def print_CANCoder_values(self):
         print(f"Encoder 0: {str(self.frontLeft.getAbsoluteEncoderRad())}")
@@ -126,11 +121,11 @@ class SwerveSubsystem(Subsystem):
 
     def print_NEO_encoder_values(self):
         print(f"Drive 0: {str(self.frontLeft.getDrivePosition())}")
-        print(f"Turn 0: {str(self.frontRight.getTurningPosition())}")
+        print(f"Turn 0: {str(self.frontLeft.getTurningPosition())}")
         print(f"Drive 1: {str(self.backLeft.getDrivePosition())}")
-        print(f"Turn 1: {str(self.backRight.getTurningPosition())}")
-        print(f"Drive 2: {str(self.frontLeft.getDrivePosition())}")
-        print(f"Turn 2: {str(self.frontRight.getTurningPosition())}")
-        print(f"Drive 3: {str(self.backLeft.getDrivePosition())}")
-        print(f"Turn 3: {str(self.backRight.getTurningPosition())}")
+        print(f"Turn 1: {str(self.backLeft.getTurningPosition())}")
+        print(f"Drive 2: {str(self.backRight.getDrivePosition())}")
+        print(f"Turn 2: {str(self.backRight.getTurningPosition())}")
+        print(f"Drive 3: {str(self.frontRight.getDrivePosition())}")
+        print(f"Turn 3: {str(self.frontRight.getTurningPosition())}")
         

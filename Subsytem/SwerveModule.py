@@ -85,7 +85,7 @@ class SwerveModule:
         self.absoluteEncoder.configAllSettings(swerve_can_coder_config)
 
     def setDesiredState(self, state:SwerveModuleState) -> None:
-        if abs(SwerveModuleState(state).speed) < 0.001:
+        if abs(state.speed) < 0.001:
             self.stop()
             return
         state = SwerveModuleState.optimize(state, self.getState().angle)
