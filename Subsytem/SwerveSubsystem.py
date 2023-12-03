@@ -1,5 +1,5 @@
 import wpilib
-import math
+from wpimath import filter
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.kinematics import SwerveDrive4Odometry, SwerveDrive4Kinematics, ChassisSpeeds
 from commands2 import Subsystem
@@ -16,6 +16,10 @@ class SwerveSubsystem(Subsystem):
 
         self.gyro = wpilib.ADXRS450_Gyro(wpilib.SPI.Port.kOnboardCS0)
         self.zeroHeading()
+
+        self.xLimiter = filter.SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond)
+        self.yLimiter = filter.SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond)
+        self.tLimiter = filter.SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond)
         
         self.frontLeft:SwerveModule = SwerveModule(
             DriveConstants.kFrontLeftDriveMotorPort,
@@ -101,6 +105,10 @@ class SwerveSubsystem(Subsystem):
         ySpeed = ySpeed if abs(ySpeed) > OIConstants.kDeadband else 0.0
         tSpeed = tSpeed if abs(tSpeed) > OIConstants.kDeadband else 0.0
 
+        xSpeed = self.xLimiter.calculate(xSpeed)*DriveConstants.kTeleDriveMaxSpeedMetersPerSecond
+        ySpeed = self.yLimiter.calculate(ySpeed)*DriveConstants.kTeleDriveMaxSpeedMetersPerSecond
+        tSpeed = self.tLimiter.calculate(tSpeed)*DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond
+        
         translation: Translation2d = Translation2d(xSpeed, ySpeed)
 
         cSpeed: ChassisSpeeds

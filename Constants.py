@@ -18,7 +18,7 @@ class ModuleConstants:
     drive_kd = 0.0
     drive_kf = 0.0
 
-    kWheelDiameterMeters = units.inchesToMeters(4)
+    kWheelDiameterMeters = 0.095
     kDriveMotorGearRatio = 6.75
     kTurningMotorGearRatio = 12
     kDriveEncoderRot2Meter = kDriveMotorGearRatio * math.pi * kWheelDiameterMeters
@@ -37,7 +37,7 @@ class DriveConstants:
         Translation2d(-kWheelBase / 2, kTrackWidth / 2)
     )
 
-    swerve_max_speed = 1
+    swerve_max_speed = 4.6
 
     #FrontLeft
     kFrontLeftDriveMotorPort = 2
@@ -46,7 +46,7 @@ class DriveConstants:
     kFrontLeftDriveEncoderReversed = False
     kFrontLeftDriveAbsoluteEncoderPort = 9
     kFrontLeftDriveAbsoluteEncoderReversed = False
-    kFrontLeftDriveAbsoluteEncoderOffset = 154.316
+    kFrontLeftDriveAbsoluteEncoderOffset = 36.562
     
     #FrontRight
     kFrontRightDriveMotorPort = 7
@@ -55,7 +55,7 @@ class DriveConstants:
     kFrontRightDriveEncoderReversed = False
     kFrontRightDriveAbsoluteEncoderPort = 12
     kFrontRightDriveAbsoluteEncoderReversed = False
-    kFrontRightDriveAbsoluteEncoderOffset = 5.361
+    kFrontRightDriveAbsoluteEncoderOffset = 6.504
     
     #BackLeft
     kBackLeftDriveMotorPort = 3
@@ -64,7 +64,7 @@ class DriveConstants:
     kBackLeftDriveEncoderReversed = False
     kBackLeftDriveAbsoluteEncoderPort = 10
     kBackLeftDriveAbsoluteEncoderReversed = False
-    kBackLeftDriveAbsoluteEncoderOffset = 31.025
+    kBackLeftDriveAbsoluteEncoderOffset = 146.338
     
     #BackRight
     kBackRightDriveMotorPort = 5
@@ -73,7 +73,7 @@ class DriveConstants:
     kBackRightDriveEncoderReversed = False
     kBackRightDriveAbsoluteEncoderPort = 11
     kBackRightDriveAbsoluteEncoderReversed = False
-    kBackRightDriveAbsoluteEncoderOffset = 127.266
+    kBackRightDriveAbsoluteEncoderOffset = 127.441
 
     kPhysicalMaxSpeedMetersPerSecond = 4.6
     kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * math.pi
