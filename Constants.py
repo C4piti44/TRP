@@ -25,42 +25,43 @@ class DriveConstants:
         Translation2d(-kWheelBase / 2, kTrackWidth / 2)
     )
 
-    kFrontLeftDriveMotorPort = 8
-    kBackLeftDriveMotorPort = 2
-    kFrontRightDriveMotorPort = 6
-    kBackRightDriveMotorPort = 4
-
-    kFrontLeftTurningMotorPort = 7
-    kBackLeftTurningMotorPort = 1
-    kFrontRightTurningMotorPort = 5
-    kBackRightTurningMotorPort = 3
-
+    #FrontLeft
+    kFrontLeftDriveMotorPort = 1
+    kFrontLeftTurningMotorPort = 2
     kFrontLeftTurningEncoderReversed = False
-    kBackLeftTurningEncoderReversed = False
-    kFrontRightTurningEncoderReversed = False
-    kBackRightTurningEncoderReversed =  False
-
     kFrontLeftDriveEncoderReversed = False
-    kBackLeftDriveEncoderReversed = False
-    kFrontRightDriveEncoderReversed = False
-    kBackRightDriveEncoderReversed = False
-
     kFrontLeftDriveAbsoluteEncoderPort = 0
-    kBackLeftDriveAbsoluteEncoderPort = 2
-    kFrontRightDriveAbsoluteEncoderPort = 1
-    kBackRightDriveAbsoluteEncoderPort = 3
-
     kFrontLeftDriveAbsoluteEncoderReversed = False
-    kBackLeftDriveAbsoluteEncoderReversed = False
-    kFrontRightDriveAbsoluteEncoderReversed = False
-    kBackRightDriveAbsoluteEncoderReversed = False
-
     kFrontLeftDriveAbsoluteEncoderOffsetRad = 0
-    kBackLeftDriveAbsoluteEncoderOffsetRad = 0
+    
+    #FrontRight
+    kFrontRightDriveMotorPort = 7
+    kFrontRightTurningMotorPort = 8
+    kFrontRightTurningEncoderReversed = False
+    kFrontRightDriveEncoderReversed = False
+    kFrontRightDriveAbsoluteEncoderPort = 3
+    kFrontRightDriveAbsoluteEncoderReversed = False
     kFrontRightDriveAbsoluteEncoderOffsetRad = 0
+    
+    #BackLeft
+    kBackLeftDriveMotorPort = 3
+    kBackLeftTurningMotorPort = 4
+    kBackLeftTurningEncoderReversed = False
+    kBackLeftDriveEncoderReversed = False
+    kBackLeftDriveAbsoluteEncoderPort = 1
+    kBackLeftDriveAbsoluteEncoderReversed = False
+    kBackLeftDriveAbsoluteEncoderOffsetRad = 0
+    
+    #BackRight
+    kBackRightDriveMotorPort = 5
+    kBackRightTurningMotorPort = 6
+    kBackRightTurningEncoderReversed =  False
+    kBackRightDriveEncoderReversed = False
+    kBackRightDriveAbsoluteEncoderPort = 2
+    kBackRightDriveAbsoluteEncoderReversed = False
     kBackRightDriveAbsoluteEncoderOffsetRad = 0
 
-    kPhysicalMaxSpeedMetersPerSecond = 5
+    kPhysicalMaxSpeedMetersPerSecond = 4.6
     kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * math.pi
 
     kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 4
@@ -85,9 +86,8 @@ class AutoConstants:
 class OIConstants:
     kDriverControllerPort = 0
 
-    kDriverYAxis = 1
-    kDriverXAxis = 0
-    kDriverRotAxis = 4
+    #kDriverYAxis = 1
+    #kDriverXAxis = 0
+    #kDriverRotAxis = 4
     kDriverFieldOrientedButtonIdx = 1
-
     kDeadband = 0.05
