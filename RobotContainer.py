@@ -1,6 +1,6 @@
 from commands2 import Command
 from Constants import OIConstants
-from Subsytem import SwerveSubsystem
+from Subsytem.SwerveSubsystem import SwerveSubsystem
 import commands2
 import commands2.cmd
 import commands2.button
@@ -9,18 +9,18 @@ import math
 class RobotContainer:
 
     def __init__(self):
-        self.swerveSubsystem = SwerveSubsystem.SwerveSubsystem()
-
+        self.swerveSubsystem = SwerveSubsystem
+        
+        commands2._impl.Command
+        
         self.driverController = commands2.button.CommandPS4Controller(OIConstants.kDriverControllerPort)
-        self.driverController.cross().onFalse(
-            commands2.cmd.run(
-                lambda: self.swerveSubsystem.drive(
-                    self.driverController.getLeftX(),
-                    self.driverController.getLeftY(),
-                    self.driverController.getRightX(),
-                    True,
-                )
-            )
+        self.swerveSubsystem.setDefaultCommand(
+            self.swerveSubsystem.run(self.swerveSubsystem, self.swerveSubsystem.drive(
+                self.swerveSubsystem
+                ,self.driverController.getLeftX()
+                ,self.driverController.getLeftY()
+                ,self.driverController.getRightX()
+            ))
         )
 
         self.configure_button_bindings()
@@ -31,10 +31,11 @@ class RobotContainer:
         pass
     def get_gyro(self) -> float:
         return self.swerveSubsystem.get_angle()
-    def print_CANCoder(self) -> None:
-        self.swerveSubsystem.print_CANCoder_values()
-    def print_NEO_encoder(self) -> None:
-        self.swerveSubsystem.print_NEO_encoder_values()
+    def get_swerve(self) -> SwerveSubsystem:
+        return self.swerveSubsystem
+    def get_controller(self) -> commands2.button.CommandPS4Controller:
+        return self.driverController
+
 if __name__ == "__main__":
     # Instantiate RobotContainer and use its methods as needed
     robot_container = RobotContainer()

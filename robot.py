@@ -6,9 +6,10 @@ from RobotContainer import RobotContainer
 class MyRobot(commands2.TimedCommandRobot):
     #robot
     def robotInit(self) -> None:
+        self.scheduler = commands2.CommandScheduler.getInstance()
         self.container = RobotContainer()
     def robotPeriodic(self) -> None:
-        pass
+        commands2.CommandScheduler.getInstance().run()
     #autonomus
     def autonomousInit(self) -> None:
         pass
@@ -19,7 +20,7 @@ class MyRobot(commands2.TimedCommandRobot):
     def teleopInit(self) -> None:
         pass
     def teleopPeriodic(self) -> None:
-        self.container.print_NEO_encoder()
+        pass
     def testInit(self) -> None:
         pass
 

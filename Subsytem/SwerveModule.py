@@ -10,8 +10,16 @@ from Constants import (
     )
 
 class SwerveModule:
-    def __init__(self, driveMotorId, turningMotorId, driveMotorReversed, turningMotorReversed,absoluteEncoderId, absoluteEncoderOffset, absoluteEncoderReversed) -> None:
-        self.absoluteEncoderOffsetRad = absoluteEncoderOffset
+    def __init__(self, 
+                driveMotorId:int, 
+                turningMotorId:int,
+                driveMotorReversed:bool,
+                turningMotorReversed:bool,
+                absoluteEncoderId:int,
+                absoluteEncoderOffset:float,
+                absoluteEncoderReversed:bool) -> None:
+        
+        self.absoluteEncoderOffset = absoluteEncoderOffset
         self.absoluteEncoderReversed = absoluteEncoderReversed
         self.absoluteEncoder = CANCoder(absoluteEncoderId)
 
@@ -55,8 +63,8 @@ class SwerveModule:
 
     def getAbsoluteEncoderRad(self) -> float:
         angle = self.absoluteEncoder.getAbsolutePosition()
+        angle -= self.absoluteEncoderOffset
         angle *= (math.pi/180)
-        angle -= self.absoluteEncoderOffsetRad
         return angle * (-1.0 if self.absoluteEncoderReversed else 1.0)
 
     def resetEncoders(self) -> None:
