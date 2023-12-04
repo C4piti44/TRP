@@ -71,7 +71,7 @@ class SwerveSubsystem(Subsystem):
         return math.remainder(self.gyro.getAngle(), 360)
 
     def getRotation2d(self) -> Rotation2d:
-        return Rotation2d.fromDegrees(self.gyro.getAngle())
+        return Rotation2d.fromDegrees(self.getHeading())
 
     def getPose(self) -> Pose2d:
         return self.odometer.getPose()
