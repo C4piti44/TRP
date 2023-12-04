@@ -4,6 +4,7 @@ from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.kinematics import SwerveDrive4Odometry, SwerveDrive4Kinematics, ChassisSpeeds
 from commands2 import Subsystem
 import commands2
+import math
 from Constants import (
     DriveConstants,
     OIConstants
@@ -67,7 +68,7 @@ class SwerveSubsystem(Subsystem):
         self.gyro.reset()
 
     def getHeading(self) -> float:
-        return self.gyro.getAngle() % 360
+        return math.remainder(self.gyro.getAngle(), 360)
 
     def getRotation2d(self) -> Rotation2d:
         return Rotation2d.fromDegrees(self.gyro.getAngle())
@@ -101,9 +102,9 @@ class SwerveSubsystem(Subsystem):
         self.backRight.setDesiredState(desiredStates[3])
 
     def drive(self, xSpeed: float, ySpeed: float, tSpeed: float, fieldOriented: bool = True) -> None:
-        xSpeed = xSpeed if abs(xSpeed) > OIConstants.kDeadband else 0.0
-        ySpeed = ySpeed if abs(ySpeed) > OIConstants.kDeadband else 0.0
-        tSpeed = tSpeed if abs(tSpeed) > OIConstants.kDeadband else 0.0
+        xSpeed = xSpeed if abs(xSpeed) > OIConstants.kStickDriftLX else 0.0
+        ySpeed = ySpeed if abs(ySpeed) > OIConstants.kStickDriftLY else 0.0
+        tSpeed = tSpeed if abs(tSpeed) > OIConstants.kStickDriftRX else 0.0
 
         xSpeed = self.xLimiter.calculate(xSpeed)*DriveConstants.kTeleDriveMaxSpeedMetersPerSecond
         ySpeed = self.yLimiter.calculate(ySpeed)*DriveConstants.kTeleDriveMaxSpeedMetersPerSecond
@@ -113,7 +114,7 @@ class SwerveSubsystem(Subsystem):
 
         cSpeed: ChassisSpeeds
         if fieldOriented:
-            cSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(translation.X(), translation.Y(), tSpeed, self.getRotation2d())
+            cSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(translation.Y(), translation.X(), tSpeed, self.getRotation2d())
         else:
             cSpeed = ChassisSpeeds(xSpeed, ySpeed, tSpeed)
 

@@ -16,9 +16,9 @@ class RobotContainer:
             self.swerveSubsystem.run(
                 lambda: SwerveSubsystem.drive(
                     self.swerveSubsystem,
-                    0,
-                    0.2,
-                    0
+                    self.driverController.getLeftX(),
+                    self.driverController.getLeftY(),
+                    self.driverController.getRightX()
                 )
             )
         )
@@ -31,8 +31,10 @@ class RobotContainer:
         pass
     def get_swerve(self) -> SwerveSubsystem:
         return self.swerveSubsystem
-    def get_controller(self) -> commands2.button.CommandPS4Controller:
-        return self.driverController
+    def print_joystick(self) -> None:
+        print(f"Left Y: {str(self.driverController.getLeftY())}")
+        print(f"Left X: {str(self.driverController.getLeftX())}")
+        print(f"Right X: {str(self.driverController.getRightX())}")
 
 if __name__ == "__main__":
     # Instantiate RobotContainer and use its methods as needed

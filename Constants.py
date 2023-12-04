@@ -19,8 +19,8 @@ class ModuleConstants:
     drive_kf = 0.0
 
     kWheelDiameterMeters = 0.095
-    kDriveMotorGearRatio = 6.75
-    kTurningMotorGearRatio = 12
+    kDriveMotorGearRatio = 1/6.75
+    kTurningMotorGearRatio = 1/12
     kDriveEncoderRot2Meter = kDriveMotorGearRatio * math.pi * kWheelDiameterMeters
     kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * math.pi
     kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60
@@ -46,16 +46,16 @@ class DriveConstants:
     kFrontLeftDriveEncoderReversed = True
     kFrontLeftDriveAbsoluteEncoderPort = 9
     kFrontLeftDriveAbsoluteEncoderReversed = False
-    kFrontLeftDriveAbsoluteEncoderOffset = 1.582
+    kFrontLeftDriveAbsoluteEncoderOffset = 360-170.155
     
     #FrontRight
     kFrontRightDriveMotorPort = 7
     kFrontRightTurningMotorPort = 8
     kFrontRightTurningEncoderReversed = True
-    kFrontRightDriveEncoderReversed = True
+    kFrontRightDriveEncoderReversed = False
     kFrontRightDriveAbsoluteEncoderPort = 12
     kFrontRightDriveAbsoluteEncoderReversed = False
-    kFrontRightDriveAbsoluteEncoderOffset = 360-127.411
+    kFrontRightDriveAbsoluteEncoderOffset = 360-26.455
     
     #BackLeft
     kBackLeftDriveMotorPort = 3
@@ -64,16 +64,16 @@ class DriveConstants:
     kBackLeftDriveEncoderReversed = False
     kBackLeftDriveAbsoluteEncoderPort = 10
     kBackLeftDriveAbsoluteEncoderReversed = False
-    kBackLeftDriveAbsoluteEncoderOffset = 360-6.504
+    kBackLeftDriveAbsoluteEncoderOffset = 51.15
     
     #BackRight
     kBackRightDriveMotorPort = 5
     kBackRightTurningMotorPort = 6
-    kBackRightTurningEncoderReversed =  False
+    kBackRightTurningEncoderReversed =  True
     kBackRightDriveEncoderReversed = True
     kBackRightDriveAbsoluteEncoderPort = 11
     kBackRightDriveAbsoluteEncoderReversed = False
-    kBackRightDriveAbsoluteEncoderOffset = 172.177
+    kBackRightDriveAbsoluteEncoderOffset = 200.757
 
     kPhysicalMaxSpeedMetersPerSecond = 4.6
     kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * math.pi
@@ -105,3 +105,6 @@ class OIConstants:
     #kDriverRotAxis = 4
     kDriverFieldOrientedButtonIdx = 1
     kDeadband = 0.05
+    kStickDriftLX = 0.11
+    kStickDriftLY = 0.05
+    kStickDriftRX = 0.11
