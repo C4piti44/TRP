@@ -21,7 +21,10 @@ class MyRobot(commands2.TimedCommandRobot):
         pass
     def teleopPeriodic(self) -> None:
         #self.container.get_swerve().print_CANCoder_values()
-        self.container.get_swerve().print_NEO_encoder_values()
+        #self.container.get_swerve().print_NEO_encoder_values()
+        #self.container.get_swerve().print_gyro_angle()
+        #self.container.print_joystick()
+        pass
     def testInit(self) -> None:
         pass
 

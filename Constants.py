@@ -88,23 +88,19 @@ class AutoConstants:
     kMaxAngularSpeedRadiansPerSecond = DriveConstants.kPhysicalMaxAngularSpeedRadiansPerSecond / 10
     kMaxAccelerationMetersPerSecondSquared = 3
     kMaxAngularAccelerationRadiansPerSecondSquared = math.pi / 4
-#    kPXController = 1.5
-#    kPYController = 1.5
-#    kPThetaController = 3
+    kPXController = 1.5
+    kPYController = 1.5
+    kPThetaController = 3
 
-#    kThetaControllerConstraints = TrapezoidProfile.Constraints(
-#        kMaxAngularSpeedRadiansPerSecond,
-#        kMaxAngularAccelerationRadiansPerSecondSquared
-#    )
+    kThetaControllerConstraints = TrapezoidProfile.Constraints(
+        kMaxAngularSpeedRadiansPerSecond,
+        kMaxAngularAccelerationRadiansPerSecondSquared
+    )
 
 class OIConstants:
     kDriverControllerPort = 0
 
-    #kDriverYAxis = 1
-    #kDriverXAxis = 0
-    #kDriverRotAxis = 4
-    kDriverFieldOrientedButtonIdx = 1
-    kDeadband = 0.05
+    #stick drift values
     kStickDriftLX = 0.11
     kStickDriftLY = 0.05
     kStickDriftRX = 0.11

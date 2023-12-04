@@ -64,7 +64,6 @@ class SwerveModule:
     def getAbsoluteEncoder(self) -> float:
         angle = self.absoluteEncoder.getAbsolutePosition()
         angle -= self.absoluteEncoderOffset
-        #angle *= (math.pi/180)
         return angle * (-1.0 if self.absoluteEncoderReversed else 1.0)
 
     def resetEncoders(self) -> None:
@@ -90,7 +89,7 @@ class SwerveModule:
             return
         state = SwerveModuleState.optimize(state, self.getState().angle)
         self.driveMotor.set(state.speed / DriveConstants.kPhysicalMaxSpeedMetersPerSecond)
-        self.turningMotor.set(self.turningPidController.calculate(self.getTurningPosition(), state.angle.radians()))
+        self.turningMotor.set(self.turningPidController.calculate(self.getTurningPosition()*(math.pi/180), state.angle.radians()))
 
     def stop(self) -> None:
         self.driveMotor.set(0)
