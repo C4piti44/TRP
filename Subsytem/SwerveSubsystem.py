@@ -129,13 +129,13 @@ class SwerveSubsystem(Subsystem):
 
     def print_NEO_encoder_values(self):
         print(f"Drive 0: {str(self.frontLeft.getDrivePosition())}")
-        print(f"Turn 0: {str(self.frontLeft.getTurningPosition())}")
+        print(f"Turn 0: {str(self.frontLeft.getTurningPosition()*(180/math.pi))}")
         print(f"Drive 1: {str(self.backLeft.getDrivePosition())}")
-        print(f"Turn 1: {str(self.backLeft.getTurningPosition())}")
+        print(f"Turn 1: {str(self.backLeft.getTurningPosition()*(180/math.pi))}")
         print(f"Drive 2: {str(self.backRight.getDrivePosition())}")
-        print(f"Turn 2: {str(self.backRight.getTurningPosition())}")
+        print(f"Turn 2: {str(self.backRight.getTurningPosition()*(180/math.pi))}")
         print(f"Drive 3: {str(self.frontRight.getDrivePosition())}")
-        print(f"Turn 3: {str(self.frontRight.getTurningPosition())}")
+        print(f"Turn 3: {str(self.frontRight.getTurningPosition()*(180/math.pi))}")
     
     def print_gyro_angle(self):
         print(f"Gyro Angle(Deg): {str(self.gyro.getAngle())}")

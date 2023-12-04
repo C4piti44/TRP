@@ -1,5 +1,4 @@
 
-from wpimath import units
 from wpimath.trajectory import TrapezoidProfile
 from wpimath.kinematics import SwerveDrive4Kinematics
 from wpimath.geometry import Translation2d
