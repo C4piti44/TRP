@@ -19,12 +19,12 @@ class ModuleConstants:
 
     kWheelDiameterMeters = 0.095
     kDriveMotorGearRatio = 1/6.75
-    kTurningMotorGearRatio = 1/12
+    kTurningMotorGearRatio = 1/(150/7)
     kDriveEncoderRot2Meter = kDriveMotorGearRatio * math.pi * kWheelDiameterMeters
     kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * math.pi
     kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60
     kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60
-    kPTurning = 0.5
+    kPTurning = 0.1
 
 class DriveConstants:
     kTrackWidth = 0.59
@@ -45,25 +45,25 @@ class DriveConstants:
     kFrontLeftDriveEncoderReversed = True
     kFrontLeftDriveAbsoluteEncoderPort = 9
     kFrontLeftDriveAbsoluteEncoderReversed = False
-    kFrontLeftDriveAbsoluteEncoderOffset = 360-170.155
+    kFrontLeftDriveAbsoluteEncoderOffset = 38.453
     
     #FrontRight
     kFrontRightDriveMotorPort = 7
     kFrontRightTurningMotorPort = 8
     kFrontRightTurningEncoderReversed = True
-    kFrontRightDriveEncoderReversed = False
+    kFrontRightDriveEncoderReversed = True
     kFrontRightDriveAbsoluteEncoderPort = 12
     kFrontRightDriveAbsoluteEncoderReversed = False
-    kFrontRightDriveAbsoluteEncoderOffset = 360-26.455
-    
+    kFrontRightDriveAbsoluteEncoderOffset = 185.449
+
     #BackLeft
     kBackLeftDriveMotorPort = 3
     kBackLeftTurningMotorPort = 4
     kBackLeftTurningEncoderReversed = True
-    kBackLeftDriveEncoderReversed = False
+    kBackLeftDriveEncoderReversed = True
     kBackLeftDriveAbsoluteEncoderPort = 10
     kBackLeftDriveAbsoluteEncoderReversed = False
-    kBackLeftDriveAbsoluteEncoderOffset = 51.15
+    kBackLeftDriveAbsoluteEncoderOffset = 152.623
     
     #BackRight
     kBackRightDriveMotorPort = 5
@@ -72,7 +72,7 @@ class DriveConstants:
     kBackRightDriveEncoderReversed = True
     kBackRightDriveAbsoluteEncoderPort = 11
     kBackRightDriveAbsoluteEncoderReversed = False
-    kBackRightDriveAbsoluteEncoderOffset = 200.757
+    kBackRightDriveAbsoluteEncoderOffset = 129.11
 
     kPhysicalMaxSpeedMetersPerSecond = 4.6
     kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * math.pi
@@ -100,6 +100,6 @@ class OIConstants:
     kDriverControllerPort = 0
 
     #stick drift values
-    kStickDriftLX = 0.11
+    kStickDriftLX = 0.05
     kStickDriftLY = 0.05
-    kStickDriftRX = 0.11
+    kStickDriftRX = 0.05

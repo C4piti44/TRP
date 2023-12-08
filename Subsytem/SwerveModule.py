@@ -45,8 +45,8 @@ class SwerveModule:
 
     def get_position(self) -> SwerveModulePosition:
         return SwerveModulePosition(
-            self.getDrivePosition()*2*math.pi*ModuleConstants.kWheelDiameterMeters,
-            Rotation2d(self.getAbsoluteEncoder())
+            self.getDrivePosition(),
+            Rotation2d.fromDegrees(self.getTurningPosition()*(math.pi/180))
         )
 
     def getDrivePosition(self) -> float:

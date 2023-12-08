@@ -1,5 +1,4 @@
 import wpilib
-from wpimath import filter
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.kinematics import SwerveDrive4Odometry, SwerveDrive4Kinematics, ChassisSpeeds
 from commands2 import Subsystem
@@ -15,13 +14,9 @@ class SwerveSubsystem(Subsystem):
     def __init__(self) -> None:
         commands2._impl.Subsystem.__init__(self)
 
-        self.gyro = wpilib.ADXRS450_Gyro(wpilib.SPI.Port.kOnboardCS0)
+        self.gyro = wpilib.ADXRS450_Gyro()
         self.zeroHeading()
 
-        self.xLimiter = filter.SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond)
-        self.yLimiter = filter.SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond)
-        self.tLimiter = filter.SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond)
-        
         self.frontLeft:SwerveModule = SwerveModule(
             DriveConstants.kFrontLeftDriveMotorPort,
             DriveConstants.kFrontLeftTurningMotorPort,
@@ -61,14 +56,14 @@ class SwerveSubsystem(Subsystem):
             DriveConstants.kBackRightDriveAbsoluteEncoderOffset,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed
         )
-        self.odometer = SwerveDrive4Odometry(DriveConstants.kDriveKinematics, Rotation2d.fromDegrees(self.gyro.getAngle()), [self.frontLeft.get_position(), self.frontRight.get_position(), self.backLeft.get_position(), self.backRight.get_position()])
+        self.odometer = SwerveDrive4Odometry(DriveConstants.kDriveKinematics, Rotation2d.fromDegrees(self.gyro.getAngle()),[self.frontLeft.get_position(), self.frontRight.get_position(), self.backLeft.get_position(), self.backRight.get_position()])
         
         
     def zeroHeading(self) -> None:
         self.gyro.reset()
 
     def getHeading(self) -> float:
-        return math.remainder(self.gyro.getAngle(), 360)
+        return math.remainder(self.gyro.getAngle(), 180)
 
     def getRotation2d(self) -> Rotation2d:
         return Rotation2d.fromDegrees(self.getHeading())
@@ -96,20 +91,16 @@ class SwerveSubsystem(Subsystem):
 
     def setModuleStates(self, desiredStates) -> None:
         SwerveDrive4Kinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond)
-        self.frontLeft.setDesiredState(desiredStates[0])
-        self.frontRight.setDesiredState(desiredStates[1])
-        self.backLeft.setDesiredState(desiredStates[2])
-        self.backRight.setDesiredState(desiredStates[3])
+        self.frontLeft.setDesiredState(desiredStates[1])
+        self.frontRight.setDesiredState(desiredStates[0])
+        self.backLeft.setDesiredState(desiredStates[3])
+        self.backRight.setDesiredState(desiredStates[2])
 
     def drive(self, xSpeed: float, ySpeed: float, tSpeed: float, fieldOriented: bool = True) -> None:
         xSpeed = xSpeed if abs(xSpeed) > OIConstants.kStickDriftLX else 0.0
         ySpeed = ySpeed if abs(ySpeed) > OIConstants.kStickDriftLY else 0.0
         tSpeed = tSpeed if abs(tSpeed) > OIConstants.kStickDriftRX else 0.0
 
-        xSpeed = self.xLimiter.calculate(xSpeed)*DriveConstants.kTeleDriveMaxSpeedMetersPerSecond
-        ySpeed = self.yLimiter.calculate(ySpeed)*DriveConstants.kTeleDriveMaxSpeedMetersPerSecond
-        tSpeed = self.tLimiter.calculate(tSpeed)*DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond
-        
         translation: Translation2d = Translation2d(xSpeed, ySpeed)
 
         cSpeed: ChassisSpeeds
@@ -118,7 +109,7 @@ class SwerveSubsystem(Subsystem):
         else:
             cSpeed = ChassisSpeeds(xSpeed, ySpeed, tSpeed)
 
-        moduleState = DriveConstants.kDriveKinematics.toSwerveModuleStates(cSpeed)
+        moduleState = DriveConstants.kDriveKinematics.toSwerveModuleStates(cSpeed, Translation2d())
         self.setModuleStates(moduleState)
 
     def print_CANCoder_values(self):

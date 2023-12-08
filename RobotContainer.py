@@ -4,6 +4,7 @@ from Subsytem.SwerveSubsystem import SwerveSubsystem
 import commands2
 import commands2.cmd
 import commands2.button
+from wpimath import filter
 import math
 
 class RobotContainer:
@@ -22,7 +23,7 @@ class RobotContainer:
                 )
             )
         )
-
+        self.temp = filter.SlewRateLimiter
         self.configure_button_bindings()
 
     def configure_button_bindings(self):
