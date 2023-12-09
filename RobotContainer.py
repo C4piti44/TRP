@@ -5,7 +5,6 @@ import commands2
 import commands2.cmd
 import commands2.button
 from wpimath import filter
-import math
 
 class RobotContainer:
 
@@ -19,7 +18,7 @@ class RobotContainer:
                     self.swerveSubsystem,
                     self.driverController.getLeftX(),
                     self.driverController.getLeftY(),
-                    self.driverController.getRightX()
+                    self.driverController.getRightX(),
                 )
             )
         )

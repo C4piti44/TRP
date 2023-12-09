@@ -44,10 +44,7 @@ class SwerveModule:
         self.resetEncoders()
 
     def get_position(self) -> SwerveModulePosition:
-        return SwerveModulePosition(
-            self.getDrivePosition(),
-            Rotation2d.fromDegrees(self.getTurningPosition()*(math.pi/180))
-        )
+        return SwerveModulePosition(self.getDrivePosition(),Rotation2d.fromDegrees(self.getTurningPosition()*(math.pi/180)))
 
     def getDrivePosition(self) -> float:
         return self.driveEncoder.getPosition()

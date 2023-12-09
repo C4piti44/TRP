@@ -1,4 +1,5 @@
 import wpilib
+from wpimath import filter
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.kinematics import SwerveDrive4Odometry, SwerveDrive4Kinematics, ChassisSpeeds
 from commands2 import Subsystem
@@ -17,6 +18,10 @@ class SwerveSubsystem(Subsystem):
         self.gyro = wpilib.ADXRS450_Gyro()
         self.zeroHeading()
 
+        self.xLimiter = filter.SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond)
+        self.yLimiter = filter.SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond)
+        self.tLimiter = filter.SlewRateLimiter(DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond)
+        
         self.frontLeft:SwerveModule = SwerveModule(
             DriveConstants.kFrontLeftDriveMotorPort,
             DriveConstants.kFrontLeftTurningMotorPort,
@@ -63,7 +68,7 @@ class SwerveSubsystem(Subsystem):
         self.gyro.reset()
 
     def getHeading(self) -> float:
-        return math.remainder(self.gyro.getAngle(), 180)
+        return math.remainder(self.gyro.getAngle(), 360)
 
     def getRotation2d(self) -> Rotation2d:
         return Rotation2d.fromDegrees(self.getHeading())
@@ -91,15 +96,19 @@ class SwerveSubsystem(Subsystem):
 
     def setModuleStates(self, desiredStates) -> None:
         SwerveDrive4Kinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond)
-        self.frontLeft.setDesiredState(desiredStates[1])
-        self.frontRight.setDesiredState(desiredStates[0])
-        self.backLeft.setDesiredState(desiredStates[3])
-        self.backRight.setDesiredState(desiredStates[2])
+        self.frontLeft.setDesiredState(desiredStates[0])
+        self.frontRight.setDesiredState(desiredStates[1])
+        self.backLeft.setDesiredState(desiredStates[2])
+        self.backRight.setDesiredState(desiredStates[3])
 
     def drive(self, xSpeed: float, ySpeed: float, tSpeed: float, fieldOriented: bool = True) -> None:
         xSpeed = xSpeed if abs(xSpeed) > OIConstants.kStickDriftLX else 0.0
         ySpeed = ySpeed if abs(ySpeed) > OIConstants.kStickDriftLY else 0.0
         tSpeed = tSpeed if abs(tSpeed) > OIConstants.kStickDriftRX else 0.0
+
+        xSpeed = self.xLimiter.calculate(xSpeed)*DriveConstants.kTeleDriveMaxSpeedMetersPerSecond
+        ySpeed = self.yLimiter.calculate(ySpeed)*DriveConstants.kTeleDriveMaxSpeedMetersPerSecond
+        tSpeed = self.tLimiter.calculate(tSpeed)*DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond
 
         translation: Translation2d = Translation2d(xSpeed, ySpeed)
 

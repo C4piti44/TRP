@@ -24,16 +24,16 @@ class ModuleConstants:
     kTurningEncoderRot2Rad = kTurningMotorGearRatio * 2 * math.pi
     kDriveEncoderRPM2MeterPerSec = kDriveEncoderRot2Meter / 60
     kTurningEncoderRPM2RadPerSec = kTurningEncoderRot2Rad / 60
-    kPTurning = 0.1
+    kPTurning = 0.2
 
 class DriveConstants:
     kTrackWidth = 0.59
     kWheelBase = 0.59
     kDriveKinematics = SwerveDrive4Kinematics(
-        Translation2d(kWheelBase / 2, -kTrackWidth / 2),
         Translation2d(kWheelBase / 2, kTrackWidth / 2),
-        Translation2d(-kWheelBase / 2, -kTrackWidth / 2),
-        Translation2d(-kWheelBase / 2, kTrackWidth / 2)
+        Translation2d(kWheelBase / 2, -kTrackWidth / 2),
+        Translation2d(-kWheelBase / 2, kTrackWidth / 2),
+        Translation2d(-kWheelBase / 2, -kTrackWidth / 2)
     )
 
     swerve_max_speed = 4.6
