@@ -28,8 +28,12 @@ class OnboardModuleState:
         return new_angle
 
     @staticmethod
-    def optimize(desired_state: SwerveModuleState, current_angle: Rotation2d, in180=True) -> SwerveModuleState:
-        target_angle = OnboardModuleState.place_in_0_to_360_scope(current_angle.degrees(), desired_state.angle.degrees())
+    def optimize(
+        desired_state: SwerveModuleState, current_angle: Rotation2d, in180=True
+    ) -> SwerveModuleState:
+        target_angle = OnboardModuleState.place_in_0_to_360_scope(
+            current_angle.degrees(), desired_state.angle.degrees()
+        )
         target_speed = desired_state.speed
         delta = target_angle - current_angle.degrees()
 

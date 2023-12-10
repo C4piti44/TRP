@@ -6,12 +6,14 @@ import commands2.cmd
 import commands2.button
 from wpimath import filter
 
-class RobotContainer:
 
+class RobotContainer:
     def __init__(self):
         self.swerveSubsystem = SwerveSubsystem()
-        
-        self.driverController = commands2.button.CommandPS4Controller(Constants.OIConstants.kDriverControllerPort)
+
+        self.driverController = commands2.button.CommandPS4Controller(
+            Constants.OIConstants.kDriverControllerPort
+        )
         self.swerveSubsystem.setDefaultCommand(
             self.swerveSubsystem.run(
                 lambda: SwerveSubsystem.drive(
@@ -19,28 +21,30 @@ class RobotContainer:
                     self.driverController.getLeftX(),
                     self.driverController.getLeftY(),
                     self.driverController.getRightX(),
-                    True
+                    True,
                 )
             )
         )
         self.driverController.circle().onTrue(
-            commands2.cmd.runOnce(
-                lambda: self.swerveSubsystem.zeroHeading()
-            )
+            commands2.cmd.runOnce(lambda: self.swerveSubsystem.zeroHeading())
         )
         self.temp = filter.SlewRateLimiter
         self.configure_button_bindings()
 
     def configure_button_bindings(self):
         pass
+
     def get_autonomous_command(self) -> Command:
         pass
+
     def get_swerve(self) -> SwerveSubsystem:
         return self.swerveSubsystem
+
     def print_joystick(self) -> None:
         print(f"Left Y: {str(self.driverController.getLeftY())}")
         print(f"Left X: {str(self.driverController.getLeftX())}")
         print(f"Right X: {str(self.driverController.getRightX())}")
+
     def swerve_subsystem(self):
         return self.swerveSubsystem
 

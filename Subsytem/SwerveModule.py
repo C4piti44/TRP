@@ -13,22 +13,23 @@ from Constants import Constants
 
 
 class SwerveModule:
-    def __init__(self, 
-                driveMotorId:int, 
-                turningMotorId:int,
-                driveMotorReversed:bool,
-                turningMotorReversed:bool,
-                absoluteEncoderId:int,
-                absoluteEncoderOffset:float,
-                absoluteEncoderReversed:bool):
+    def __init__(
+        self,
+        driveMotorId: int,
+        turningMotorId: int,
+        driveMotorReversed: bool,
+        turningMotorReversed: bool,
+        absoluteEncoderId: int,
+        absoluteEncoderOffset: float,
+        absoluteEncoderReversed: bool,
+    ):
         self.abosulteEncoderReversed = absoluteEncoderReversed
         self.feed_forward = SimpleMotorFeedforwardMeters(
-          Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA)
+            Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA
+        )
 
-        self.angle_motor = CANSparkMax(turningMotorId,
-                                       CANSparkMax.MotorType.kBrushless)
-        self.drive_motor = CANSparkMax(driveMotorId,
-                                       CANSparkMax.MotorType.kBrushless)
+        self.angle_motor = CANSparkMax(turningMotorId, CANSparkMax.MotorType.kBrushless)
+        self.drive_motor = CANSparkMax(driveMotorId, CANSparkMax.MotorType.kBrushless)
 
         self.integrated_angle_encoder = self.angle_motor.getEncoder()
         self.angle_controller = self.angle_motor.getPIDController()
@@ -50,15 +51,26 @@ class SwerveModule:
         self.config_angle_motor()
         self.config_drive_motor()
 
-    def set_desired_state(self, desired_state: SwerveModuleState, is_open_loop: bool, override: bool = False):
-        desiredState = OnboardModuleState.optimize(desired_state, self.get_state().angle)
+    def set_desired_state(
+        self,
+        desired_state: SwerveModuleState,
+        is_open_loop: bool,
+        override: bool = False,
+    ):
+        desiredState = OnboardModuleState.optimize(
+            desired_state, self.get_state().angle
+        )
 
         self.set_angle(desiredState, override)
         self.set_speed(desiredState, is_open_loop)
 
     def reset_to_absolute(self):
         absolute_position = self.angle_encoder.getAbsolutePosition() - self.angle_offset
-        desired_state = OnboardModuleState.optimize(SwerveModuleState(0, Rotation2d.fromDegrees(absolute_position)), self.get_state().angle, False)
+        desired_state = OnboardModuleState.optimize(
+            SwerveModuleState(0, Rotation2d.fromDegrees(absolute_position)),
+            self.get_state().angle,
+            False,
+        )
 
         self.integrated_angle_encoder.setPosition(desired_state.angle.degrees())
 
@@ -70,10 +82,14 @@ class SwerveModule:
     def config_angle_motor(self):
         # self.angle_motor.restoreFactoryDefaults()
         CANSparkMaxUtil.set_spark_max_bus_usage(self.angle_motor, Usage.kPositionOnly)
-        self.angle_motor.setSmartCurrentLimit(Constants.Swerve.angleContinuousCurrentLimit)
+        self.angle_motor.setSmartCurrentLimit(
+            Constants.Swerve.angleContinuousCurrentLimit
+        )
         self.angle_motor.setInverted(self.turn_invert)
         self.angle_motor.setIdleMode(Constants.Swerve.angleNeutralMode)
-        self.integrated_angle_encoder.setPositionConversionFactor(Constants.Swerve.angleConversionFactor)
+        self.integrated_angle_encoder.setPositionConversionFactor(
+            Constants.Swerve.angleConversionFactor
+        )
         self.angle_controller.setP(Constants.Swerve.angleKP)
         self.angle_controller.setI(Constants.Swerve.angleKI)
         self.angle_controller.setD(Constants.Swerve.angleKD)
@@ -86,11 +102,17 @@ class SwerveModule:
     def config_drive_motor(self):
         # self.drive_motor.restoreFactoryDefaults()
         CANSparkMaxUtil.set_spark_max_bus_usage(self.drive_motor, Usage.kAll)
-        self.drive_motor.setSmartCurrentLimit(Constants.Swerve.driveContinuousCurrentLimit)
+        self.drive_motor.setSmartCurrentLimit(
+            Constants.Swerve.driveContinuousCurrentLimit
+        )
         self.drive_motor.setInverted(self.drive_invert)
         self.drive_motor.setIdleMode(Constants.Swerve.driveNeutralMode)
-        self.drive_encoder.setVelocityConversionFactor(Constants.Swerve.driveConversionVelocityFactor)
-        self.drive_encoder.setPositionConversionFactor(Constants.Swerve.driveConversionPositionFactor)
+        self.drive_encoder.setVelocityConversionFactor(
+            Constants.Swerve.driveConversionVelocityFactor
+        )
+        self.drive_encoder.setPositionConversionFactor(
+            Constants.Swerve.driveConversionPositionFactor
+        )
         self.drive_encoder.setPosition(0.0)
         self.drive_motor.setOpenLoopRampRate(Constants.Swerve.openLoopRamp)
         self.drive_controller.setP(Constants.Swerve.angleKP)
@@ -102,18 +124,21 @@ class SwerveModule:
 
     def set_speed(self, desired_state: SwerveModuleState, is_open_loop: bool):
         if is_open_loop:
-          percent_output = desired_state.speed / Constants.Swerve.maxSpeed
-          self.drive_motor.set(percent_output)
+            percent_output = desired_state.speed / Constants.Swerve.maxSpeed
+            self.drive_motor.set(percent_output)
         else:
             self.drive_controller.setReference(
                 desired_state.speed,
                 CANSparkMax.ControlType.kVelocity,
                 0,
-                self.feed_forward.calculate(desired_state.speed)
+                self.feed_forward.calculate(desired_state.speed),
             )
 
     def set_angle(self, desired_state: SwerveModuleState, override: bool = False):
-        if abs(desired_state.speed) <= (Constants.Swerve.maxSpeed * 0.01) and not override:
+        if (
+            abs(desired_state.speed) <= (Constants.Swerve.maxSpeed * 0.01)
+            and not override
+        ):
             angle = self.last_angle
         else:
             angle = desired_state.angle.degrees()
@@ -131,10 +156,10 @@ class SwerveModule:
         return Rotation2d.fromDegrees(self.angle_encoder.getAbsolutePosition())
 
     def get_position(self) -> SwerveModulePosition:
-        return SwerveModulePosition(self.drive_encoder.getPosition(), Rotation2d.fromDegrees(self.integrated_angle_encoder.getPosition()))
+        return SwerveModulePosition(
+            self.drive_encoder.getPosition(),
+            Rotation2d.fromDegrees(self.integrated_angle_encoder.getPosition()),
+        )
 
     def get_state(self) -> SwerveModuleState:
         return SwerveModuleState(self.drive_encoder.getVelocity(), self.get_angle())
-
-
-
