@@ -3,6 +3,7 @@ from wpimath.geometry import Translation2d
 import math
 import wpimath
 import wpimath.kinematics
+from wpimath.trajectory import TrapezoidProfile
 
 
 class Constants:
@@ -52,6 +53,22 @@ class Constants:
         driveKD = 0.0
         driveKFF = 0.0
 
+        # Theta PID Values
+        thetaKP = 0.01
+        thetaKI = 0.0
+        thetaKD = 0.008
+        kThetaControllerConstraints = TrapezoidProfile.Constraints(math.pi, math.pi)
+
+        # Drive Motor Characterization Values #
+        driveKS = 0.16548
+        driveKV = 3.2091
+        driveKA = 0.35702
+
+        # Angle Motor Characterization Values #
+        angleKS = 0.28394
+        angleKV = 0.0044533
+        angleKA = 0.00020852
+
         # Drive Motor Conversion Factors #
         driveConversionPositionFactor = (wheelDiameter * math.pi) / driveGearRatio
         driveConversionVelocityFactor = driveConversionPositionFactor / 60.0
@@ -71,10 +88,19 @@ class Constants:
         # Angle Encoder Invert #
         canCoderInvert = False
 
+        kPXController = 1
+        kPYController = 1
+        kPThetaController = 1
+
     class DriveConstants:
         kPhysicalMaxSpeedMetersPerSecond = 4.6
         kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * math.pi
-
+        kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond / 4
+        kTeleDriveMaxAngularSpeedRadiansPerSecond = (
+            kPhysicalMaxAngularSpeedRadiansPerSecond / 4
+        )
+        kTeleDriveMaxAccelerationUnitsPerSecond = 3
+        kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3
         # FrontLeft
         kFrontLeftDriveMotorPort = 2
         kFrontLeftTurningMotorPort = 1
@@ -82,7 +108,7 @@ class Constants:
         kFrontLeftDriveEncoderReversed = False
         kFrontLeftDriveAbsoluteEncoderPort = 9
         kFrontLeftDriveAbsoluteEncoderReversed = False
-        kFrontLeftDriveAbsoluteEncoderOffset = 35.244 + 180
+        kFrontLeftDriveAbsoluteEncoderOffset = 214.98 - 180
 
         # FrontRight
         kFrontRightDriveMotorPort = 7
@@ -91,7 +117,7 @@ class Constants:
         kFrontRightDriveEncoderReversed = True
         kFrontRightDriveAbsoluteEncoderPort = 12
         kFrontRightDriveAbsoluteEncoderReversed = False
-        kFrontRightDriveAbsoluteEncoderOffset = 190.283
+        kFrontRightDriveAbsoluteEncoderOffset = 8.877
 
         # BackLeft
         kBackLeftDriveMotorPort = 3
@@ -100,7 +126,7 @@ class Constants:
         kBackLeftDriveEncoderReversed = True
         kBackLeftDriveAbsoluteEncoderPort = 10
         kBackLeftDriveAbsoluteEncoderReversed = False
-        kBackLeftDriveAbsoluteEncoderOffset = 149.50
+        kBackLeftDriveAbsoluteEncoderOffset = 328.184
 
         # BackRight
         kBackRightDriveMotorPort = 5
@@ -109,7 +135,7 @@ class Constants:
         kBackRightDriveEncoderReversed = True
         kBackRightDriveAbsoluteEncoderPort = 11
         kBackRightDriveAbsoluteEncoderReversed = False
-        kBackRightDriveAbsoluteEncoderOffset = 129.463
+        kBackRightDriveAbsoluteEncoderOffset = 306.65
 
     class OIConstants:
         kDriverControllerPort = 0

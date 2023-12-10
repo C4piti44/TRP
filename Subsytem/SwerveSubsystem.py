@@ -4,7 +4,7 @@ from wpimath.kinematics import SwerveDrive4Kinematics, ChassisSpeeds
 from wpimath.estimator import SwerveDrive4PoseEstimator
 from commands2 import Subsystem
 import commands2
-import math
+from wpimath import filter
 from Constants import Constants
 from Subsytem.SwerveModule import SwerveModule
 
@@ -12,6 +12,16 @@ from Subsytem.SwerveModule import SwerveModule
 class SwerveSubsystem(Subsystem):
     def __init__(self) -> None:
         commands2._impl.Subsystem.__init__(self)
+
+        self.xLimiter = filter.SlewRateLimiter(
+            Constants.DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond
+        )
+        self.yLimiter = filter.SlewRateLimiter(
+            Constants.DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond
+        )
+        self.tLimiter = filter.SlewRateLimiter(
+            Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond
+        )
 
         self.gyro = wpilib.ADXRS450_Gyro()
         self.zeroHeading()
@@ -80,6 +90,17 @@ class SwerveSubsystem(Subsystem):
     def getPose(self) -> Pose2d:
         return self.odometer.getEstimatedPosition()
 
+    def update_odemeter(self) -> None:
+        angle = self.getHeading()
+        swerev_pose = (
+            self.frontLeft.get_position(),
+            self.frontRight.get_position(),
+            self.backRight.get_position(),
+            self.backLeft.get_position(),
+        )
+
+        self.odometer.update(angle, swerev_pose)
+
     def resetOdometry(self, pose: Pose2d) -> None:
         self.odometer.resetPosition(pose, self.getRotation2d())
 
@@ -98,6 +119,19 @@ class SwerveSubsystem(Subsystem):
         xSpeed = xSpeed if abs(xSpeed) > Constants.OIConstants.kStickDriftLX else 0.0
         ySpeed = ySpeed if abs(ySpeed) > Constants.OIConstants.kStickDriftLY else 0.0
         tSpeed = tSpeed if abs(tSpeed) > Constants.OIConstants.kStickDriftRX else 0.0
+
+        xSpeed = (
+            self.xLimiter.calculate(xSpeed)
+            * Constants.DriveConstants.kTeleDriveMaxSpeedMetersPerSecond
+        )
+        ySpeed = (
+            self.yLimiter.calculate(ySpeed)
+            * Constants.DriveConstants.kTeleDriveMaxSpeedMetersPerSecond
+        )
+        tSpeed = (
+            self.tLimiter.calculate(tSpeed)
+            * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond
+        )
 
         cSpeed: ChassisSpeeds
         if fieldOriented:

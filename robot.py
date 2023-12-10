@@ -18,10 +18,14 @@ class MyRobot(commands2.TimedCommandRobot):
         pass
 
     def autonomousPeriodic(self) -> None:
-        pass
+        if self.container.get_autonomous_command() is None:
+            return
+        self.container.get_autonomous_command().execute()
 
     # teleoperated
     def teleopInit(self) -> None:
+        if self.container.get_autonomous_command() is not None:
+            self.container.get_autonomous_command().end()
         pass
 
     def teleopPeriodic(self) -> None:
