@@ -64,10 +64,8 @@ class SwerveSubsystem(Subsystem):
         self.gyro.reset()
 
     def getHeading(self) -> float:
-        angle:float = math.remainder(self.gyro.getAngle(), 360)
-        if angle < 0:
-            return 360+angle
-        return angle
+        angle:float = self.gyro.getAngle()%360
+        return 360-angle
 
     def getRotation2d(self) -> Rotation2d:
         return Rotation2d.fromDegrees(self.getHeading())
@@ -109,4 +107,4 @@ class SwerveSubsystem(Subsystem):
         self.setModuleStates(moduleState)
 
     def print_gyro_angle(self):
-        print(f"Gyro Angle(Deg): {str(self.gyro.getAngle())}")
+        print(f"Gyro Angle(Deg): {str(self.getHeading())}")

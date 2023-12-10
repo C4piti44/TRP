@@ -19,7 +19,13 @@ class RobotContainer:
                     self.driverController.getLeftX(),
                     self.driverController.getLeftY(),
                     self.driverController.getRightX(),
+                    True
                 )
+            )
+        )
+        self.driverController.circle().onTrue(
+            commands2.cmd.runOnce(
+                lambda: self.swerveSubsystem.zeroHeading()
             )
         )
         self.temp = filter.SlewRateLimiter
