@@ -1,5 +1,5 @@
 from commands2 import Command
-from Constants import OIConstants
+from Constants import Constants
 from Subsytem.SwerveSubsystem import SwerveSubsystem
 import commands2
 import commands2.cmd
@@ -11,7 +11,7 @@ class RobotContainer:
     def __init__(self):
         self.swerveSubsystem = SwerveSubsystem()
         
-        self.driverController = commands2.button.CommandPS4Controller(OIConstants.kDriverControllerPort)
+        self.driverController = commands2.button.CommandPS4Controller(Constants.OIConstants.kDriverControllerPort)
         self.swerveSubsystem.setDefaultCommand(
             self.swerveSubsystem.run(
                 lambda: SwerveSubsystem.drive(
@@ -35,6 +35,9 @@ class RobotContainer:
         print(f"Left Y: {str(self.driverController.getLeftY())}")
         print(f"Left X: {str(self.driverController.getLeftX())}")
         print(f"Right X: {str(self.driverController.getRightX())}")
+    def swerve_subsystem(self):
+        return self.swerveSubsystem
+
 
 if __name__ == "__main__":
     # Instantiate RobotContainer and use its methods as needed

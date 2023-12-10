@@ -8,6 +8,7 @@ class MyRobot(commands2.TimedCommandRobot):
     def robotInit(self) -> None:
         self.scheduler = commands2.CommandScheduler.getInstance()
         self.container = RobotContainer()
+        self.container.swerve_subsystem().zeroHeading()
     def robotPeriodic(self) -> None:
         commands2.CommandScheduler.getInstance().run()
     #autonomus
