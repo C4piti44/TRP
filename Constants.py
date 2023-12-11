@@ -23,7 +23,7 @@ class Constants:
         closedLoopRamp = 0.0
 
         driveGearRatio = 6.75
-        angleGearRatio = (150 / 7) 
+        angleGearRatio = 150 / 7
 
         mod0 = Translation2d(wheelBase / 2.0, trackWidth / 2.0)
         mod1 = Translation2d(wheelBase / 2.0, -trackWidth / 2.0)
@@ -126,7 +126,7 @@ class Constants:
         kBackLeftDriveEncoderReversed = True
         kBackLeftDriveAbsoluteEncoderPort = 10
         kBackLeftDriveAbsoluteEncoderReversed = False
-        kBackLeftDriveAbsoluteEncoderOffset = 328.184-180
+        kBackLeftDriveAbsoluteEncoderOffset = 328.184
 
         # BackRight
         kBackRightDriveMotorPort = 5
@@ -135,7 +135,7 @@ class Constants:
         kBackRightDriveEncoderReversed = True
         kBackRightDriveAbsoluteEncoderPort = 11
         kBackRightDriveAbsoluteEncoderReversed = False
-        kBackRightDriveAbsoluteEncoderOffset = 306.65-180
+        kBackRightDriveAbsoluteEncoderOffset = 306.65
 
     class OIConstants:
         kDriverControllerPort = 0

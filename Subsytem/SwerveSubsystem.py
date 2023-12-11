@@ -20,7 +20,7 @@ class SwerveSubsystem(Subsystem):
             Constants.DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond
         )
         self.tLimiter = filter.SlewRateLimiter(
-            Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond
+            Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond*1.5
         )
 
         self.gyro = wpilib.ADXRS450_Gyro()
@@ -130,8 +130,8 @@ class SwerveSubsystem(Subsystem):
         )
         tSpeed = (
             self.tLimiter.calculate(tSpeed)
-            * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond
-        )
+            * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond*1.5
+       )
 
         cSpeed: ChassisSpeeds
         if fieldOriented:

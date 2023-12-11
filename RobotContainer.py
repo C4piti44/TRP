@@ -7,7 +7,7 @@ import commands2.button
 from Constants import Constants
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
-from wpimath.controller import PIDController, ProfiledPIDController
+from wpimath.controller import PIDController, ProfiledPIDControllerRadians
 from commands2 import (
     InstantCommand,
     SequentialCommandGroup,
@@ -54,24 +54,27 @@ class RobotContainer:
         return self.swerveSubsystem
 
     def get_autonomous_command(self) -> SequentialCommandGroup:
+        return None
         config = TrajectoryConfig(
             Constants.Swerve.maxSpeed, Constants.Swerve.maxSpeed
         ).setKinematics(Constants.Swerve.oldSwerveKinematics)
 
-        example_trajectory = TrajectoryGenerator.generateTrajectory(
+        translation_list = list[Translation2d(1, 1), Translation2d(2, 2)]
+
+        trajectory = TrajectoryGenerator.generateTrajectory(
             Pose2d(0, 0, Rotation2d(0)),
-            [Translation2d(1, 1), Translation2d(2, -1)],
+            translation_list,
             Pose2d(3, 0, Rotation2d(0)),
             config,
         )
 
-        theta_controller = ProfiledPIDController(
+        theta_controller = ProfiledPIDControllerRadians(
             Constants.Swerve.thetaKP, 0, 0, Constants.Swerve.kThetaControllerConstraints
         )
-        theta_controller.enableContinuousInput(-180, 180)
+        theta_controller.enableContinuousInput(-math.pi, math.pi)
 
         swerve_controller_command = Swerve4ControllerCommand(
-            example_trajectory,
+            trajectory,
             self.swerveSubsystem.getPose(),
             Constants.Swerve.oldSwerveKinematics,
             PIDController(Constants.Swerve.kPXController, 0, 0),
@@ -81,13 +84,6 @@ class RobotContainer:
             self.swerveSubsystem,
         )
         command_group = SequentialCommandGroup()
-        command_group.addCommands(
-            InstantCommand(
-                lambda: self.swerveSubsystem.resetOdometry(
-                    example_trajectory.getInitialPose()
-                )
-            )
-        )
         command_group.addCommands(swerve_controller_command)
 
         return command_group
