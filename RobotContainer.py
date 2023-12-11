@@ -21,7 +21,7 @@ class RobotContainer:
     def __init__(self):
         self.swerveSubsystem = SwerveSubsystem()
 
-        self.driverController = commands2.button.CommandPS4Controller(
+        self.driverController = commands2.button.CommandXboxController(
             Constants.OIConstants.kDriverControllerPort
         )
         self.swerveSubsystem.setDefaultCommand(
@@ -34,7 +34,7 @@ class RobotContainer:
                 )
             )
         )
-        self.driverController.circle().onTrue(
+        self.driverController.B().onTrue(
             commands2.cmd.runOnce(lambda: self.swerveSubsystem.zeroHeading())
         )
         self.configure_button_bindings()
@@ -77,7 +77,7 @@ class RobotContainer:
             PIDController(Constants.Swerve.kPXController, 0, 0),
             PIDController(Constants.Swerve.kPYController, 0, 0),
             theta_controller,
-            self.swerveSubsystem.setModuleStates,
+            self.swerveSubsystem.setModuleStates(),
             self.swerveSubsystem,
         )
         command_group = SequentialCommandGroup()
