@@ -1,4 +1,3 @@
-from commands2 import Command
 from Constants import Constants
 from Subsytem.SwerveSubsystem import SwerveSubsystem
 import commands2
@@ -6,14 +5,9 @@ import commands2.cmd
 import commands2.button
 from Constants import Constants
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
-from wpimath.geometry import Pose2d, Rotation2d, Translation2d
+from wpimath.geometry import Pose2d, Rotation2d
 from wpimath.controller import PIDController, ProfiledPIDControllerRadians
-from commands2 import (
-    InstantCommand,
-    SequentialCommandGroup,
-    Swerve4ControllerCommand,
-    CommandScheduler,
-)
+from commands2 import SequentialCommandGroup, Swerve4ControllerCommand
 import math
 
 
@@ -54,17 +48,17 @@ class RobotContainer:
         return self.swerveSubsystem
 
     def get_autonomous_command(self) -> SequentialCommandGroup:
-        return None
-        config = TrajectoryConfig(
+        config: TrajectoryConfig = TrajectoryConfig(
             Constants.Swerve.maxSpeed, Constants.Swerve.maxSpeed
-        ).setKinematics(Constants.Swerve.oldSwerveKinematics)
+        )
+        config.setKinematics(Constants.Swerve.SwerveKinematics)
 
-        translation_list = list[Translation2d(1, 1), Translation2d(2, 2)]
+        pose2d_list: list[Pose2d] = list[
+            Pose2d(1, 1, Rotation2d(0)), Pose2d(2, 2, Rotation2d(30))
+        ]
 
         trajectory = TrajectoryGenerator.generateTrajectory(
-            Pose2d(0, 0, Rotation2d(0)),
-            translation_list,
-            Pose2d(3, 0, Rotation2d(0)),
+            pose2d_list,
             config,
         )
 
@@ -76,7 +70,7 @@ class RobotContainer:
         swerve_controller_command = Swerve4ControllerCommand(
             trajectory,
             self.swerveSubsystem.getPose(),
-            Constants.Swerve.oldSwerveKinematics,
+            Constants.Swerve.SwerveKinematics,
             PIDController(Constants.Swerve.kPXController, 0, 0),
             PIDController(Constants.Swerve.kPYController, 0, 0),
             theta_controller,
@@ -84,6 +78,11 @@ class RobotContainer:
             self.swerveSubsystem,
         )
         command_group = SequentialCommandGroup()
+        command_group.addCommands(
+            commands2.InstantCommand(
+                lambda: self.swerveSubsystem.resetOdometry(trajectory.initialPose())
+            )
+        )
         command_group.addCommands(swerve_controller_command)
 
         return command_group

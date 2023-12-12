@@ -30,7 +30,7 @@ class Constants:
         mod2 = Translation2d(-wheelBase / 2.0, trackWidth / 2.0)
         mod3 = Translation2d(-wheelBase / 2.0, -trackWidth / 2.0)
 
-        oldSwerveKinematics = wpimath.kinematics.SwerveDrive4Kinematics(
+        SwerveKinematics = wpimath.kinematics.SwerveDrive4Kinematics(
             mod0, mod1, mod2, mod3
         )
 

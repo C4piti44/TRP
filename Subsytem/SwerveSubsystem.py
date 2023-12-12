@@ -20,7 +20,8 @@ class SwerveSubsystem(Subsystem):
             Constants.DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond
         )
         self.tLimiter = filter.SlewRateLimiter(
-            Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond*1.5
+            Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond
+            * 1.5
         )
 
         self.gyro = wpilib.ADXRS450_Gyro()
@@ -66,7 +67,7 @@ class SwerveSubsystem(Subsystem):
             Constants.DriveConstants.kBackRightDriveAbsoluteEncoderReversed,
         )
         self.odometer = SwerveDrive4PoseEstimator(
-            Constants.Swerve.oldSwerveKinematics,
+            Constants.Swerve.SwerveKinematics,
             Rotation2d.fromDegrees(self.getHeading()),
             (
                 self.frontLeft.get_position(),
@@ -130,8 +131,9 @@ class SwerveSubsystem(Subsystem):
         )
         tSpeed = (
             self.tLimiter.calculate(tSpeed)
-            * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond*1.5
-       )
+            * Constants.DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond
+            * 1.5
+        )
 
         cSpeed: ChassisSpeeds
         if fieldOriented:
@@ -141,7 +143,7 @@ class SwerveSubsystem(Subsystem):
         else:
             cSpeed = ChassisSpeeds(xSpeed, ySpeed, tSpeed)
 
-        moduleState = Constants.Swerve.oldSwerveKinematics.toSwerveModuleStates(
+        moduleState = Constants.Swerve.SwerveKinematics.toSwerveModuleStates(
             cSpeed, Translation2d()
         )
         self.setModuleStates(moduleState)
