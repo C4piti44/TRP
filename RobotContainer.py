@@ -55,7 +55,7 @@ class RobotContainer:
 
         pose2d_list: list[Pose2d] = list()
         pose2d_list.append(Pose2d(0, 0, 30))
-        pose2d_list.append(Pose2d(1, 1, 40))
+        pose2d_list.append(Pose2d(0, 1, 40))
 
         trajectory = TrajectoryGenerator.generateTrajectory(
             pose2d_list,

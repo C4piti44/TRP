@@ -17,7 +17,7 @@ class MyRobot(commands2.TimedCommandRobot):
     def autonomousInit(self) -> None:
         self.auto_command = self.container.get_autonomous_command()
         if self.auto_command is not None:
-            self.auto_command.execute()
+            self.auto_command.schedule()
         pass
 
     def autonomousPeriodic(self) -> None:

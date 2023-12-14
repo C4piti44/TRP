@@ -1,6 +1,6 @@
 import wpilib
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
-from wpimath.kinematics import SwerveDrive4Kinematics, ChassisSpeeds
+from wpimath.kinematics import SwerveDrive4Kinematics, ChassisSpeeds, SwerveModulePosition
 from wpimath.estimator import SwerveDrive4PoseEstimator
 from commands2 import Subsystem
 import commands2
@@ -78,6 +78,15 @@ class SwerveSubsystem(Subsystem):
             Pose2d(),
         )
 
+    def get_modules_positions(self) -> tuple[SwerveModulePosition]:
+        positions:tuple[SwerveModulePosition] = (
+            self.frontLeft.get_position(),
+            self.frontRight.get_position(),
+            self.backLeft.get_position(),
+            self.backRight.get_position()
+        )
+        return positions
+
     def zeroHeading(self) -> None:
         self.gyro.reset()
 
@@ -103,7 +112,8 @@ class SwerveSubsystem(Subsystem):
         self.odometer.update(angle, swerev_pose)
 
     def resetOdometry(self, pose: Pose2d) -> None:
-        self.odometer.resetPosition(pose, self.getRotation2d())
+        positions = self.get_modules_positions()
+        self.odometer.resetPosition(self.getRotation2d(), positions, pose)
 
     def setModuleStates(self, desiredStates) -> None:
         SwerveDrive4Kinematics.desaturateWheelSpeeds(
