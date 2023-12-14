@@ -54,8 +54,9 @@ class RobotContainer:
         config.setKinematics(Constants.Swerve.SwerveKinematics)
 
         pose2d_list: list[Pose2d] = list()
-        pose2d_list.append(Pose2d(0, 0, 30))
-        pose2d_list.append(Pose2d(0, 1, 40))
+        pose2d_list.append(Pose2d(0, 0, 0))
+        pose2d_list.append(Pose2d(0.5, 0, 10))
+        pose2d_list.append(Pose2d(0.5,0.5,20))
 
         trajectory = TrajectoryGenerator.generateTrajectory(
             pose2d_list,
@@ -92,7 +93,7 @@ class RobotContainer:
         command_group.addCommands(swerve_controller_command)
         command_group.addCommands(
             commands2.InstantCommand(
-                lambda: self.swerveSubsystem.stop_modules()
+                lambda: self.swerveSubsystem.reset_modules()
             )
         )
 

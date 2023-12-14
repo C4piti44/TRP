@@ -1,6 +1,6 @@
 import wpilib
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
-from wpimath.kinematics import SwerveDrive4Kinematics, ChassisSpeeds, SwerveModulePosition
+from wpimath.kinematics import SwerveDrive4Kinematics, ChassisSpeeds, SwerveModulePosition, SwerveModuleState
 from wpimath.estimator import SwerveDrive4PoseEstimator
 from commands2 import Subsystem
 import commands2
@@ -158,8 +158,8 @@ class SwerveSubsystem(Subsystem):
         )
         self.setModuleStates(moduleState)
     
-    def stop_modules(self):
-        self.frontLeft.stop_motors()
-        self.frontRight.stop_motors()
-        self.backLeft.stop_motors()
-        self.backRight.stop_motors()
+    def reset_modules(self):
+        self.frontLeft.set_desired_state(SwerveModuleState(0, Rotation2d.fromDegrees(0)), True, False)
+        self.frontRight.set_desired_state(SwerveModuleState(0, Rotation2d.fromDegrees(0)), True, False)
+        self.backLeft.set_desired_state(SwerveModuleState(0, Rotation2d.fromDegrees(0)), True, False)
+        self.backRight.set_desired_state(SwerveModuleState(0, Rotation2d.fromDegrees(0)), True, False)
