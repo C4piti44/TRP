@@ -15,8 +15,9 @@ class MyRobot(commands2.TimedCommandRobot):
 
     # autonomus
     def autonomousInit(self) -> None:
-        if self.container.get_autonomous_command() is not None:
-            self.container.get_autonomous_command().execute()
+        self.auto_command = self.container.get_autonomous_command()
+        if self.auto_command is not None:
+            self.auto_command.execute()
         pass
 
     def autonomousPeriodic(self) -> None:
@@ -24,8 +25,8 @@ class MyRobot(commands2.TimedCommandRobot):
 
     # teleoperated
     def teleopInit(self) -> None:
-        if self.container.get_autonomous_command() is not None:
-            self.container.get_autonomous_command().end()
+        if self.auto_command is not None:
+            self.auto_command.cancel()
         pass
 
     def teleopPeriodic(self) -> None:

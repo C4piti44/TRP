@@ -163,3 +163,7 @@ class SwerveModule:
 
     def get_state(self) -> SwerveModuleState:
         return SwerveModuleState(self.drive_encoder.getVelocity(), self.get_angle())
+
+    def stop_motors(self) -> None:
+        self.angle_motor.set(0)
+        self.drive_motor.set(0)

@@ -3,7 +3,7 @@ from wpimath.geometry import Translation2d
 import math
 import wpimath
 import wpimath.kinematics
-from wpimath.trajectory import TrapezoidProfile
+from wpimath.trajectory import TrapezoidProfileRadians
 
 
 class Constants:
@@ -57,7 +57,9 @@ class Constants:
         thetaKP = 0.01
         thetaKI = 0.0
         thetaKD = 0.008
-        kThetaControllerConstraints = TrapezoidProfile.Constraints(math.pi, math.pi)
+        kThetaControllerConstraints = TrapezoidProfileRadians.Constraints(
+            math.pi, math.pi
+        )
 
         # Drive Motor Characterization Values #
         driveKS = 0.16548

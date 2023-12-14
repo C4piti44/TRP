@@ -147,3 +147,9 @@ class SwerveSubsystem(Subsystem):
             cSpeed, Translation2d()
         )
         self.setModuleStates(moduleState)
+    
+    def stop_modules(self):
+        self.frontLeft.stop_motors()
+        self.frontRight.stop_motors()
+        self.backLeft.stop_motors()
+        self.backRight.stop_motors()

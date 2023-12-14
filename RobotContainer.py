@@ -5,9 +5,9 @@ import commands2.cmd
 import commands2.button
 from Constants import Constants
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
-from wpimath.geometry import Pose2d, Rotation2d
+from wpimath.geometry import Pose2d
 from wpimath.controller import PIDController, ProfiledPIDControllerRadians
-from commands2 import SequentialCommandGroup, Swerve4ControllerCommand
+from commands2 import SequentialCommandGroup, Swerve4ControllerCommand, Subsystem, Command
 import math
 
 
@@ -47,15 +47,15 @@ class RobotContainer:
     def swerve_subsystem(self):
         return self.swerveSubsystem
 
-    def get_autonomous_command(self) -> SequentialCommandGroup:
+    def get_autonomous_command(self) -> Command:
         config: TrajectoryConfig = TrajectoryConfig(
             Constants.Swerve.maxSpeed, Constants.Swerve.maxSpeed
         )
         config.setKinematics(Constants.Swerve.SwerveKinematics)
 
-        pose2d_list: list[Pose2d] = list[
-            Pose2d(1, 1, Rotation2d(0)), Pose2d(2, 2, Rotation2d(30))
-        ]
+        pose2d_list: list[Pose2d] = list()
+        pose2d_list.append(Pose2d(0, 0, 30))
+        pose2d_list.append(Pose2d(1, 1, 40))
 
         trajectory = TrajectoryGenerator.generateTrajectory(
             pose2d_list,
@@ -67,15 +67,21 @@ class RobotContainer:
         )
         theta_controller.enableContinuousInput(-math.pi, math.pi)
 
+        requirements: list[Subsystem] = list()
+        requirements.append(self.swerveSubsystem)
+
+        xController = PIDController(Constants.Swerve.kPXController, 0, 0)
+        yController = PIDController(Constants.Swerve.kPYController, 0, 0)
+
         swerve_controller_command = Swerve4ControllerCommand(
             trajectory,
-            self.swerveSubsystem.getPose(),
+            self.swerveSubsystem.getPose,
             Constants.Swerve.SwerveKinematics,
-            PIDController(Constants.Swerve.kPXController, 0, 0),
-            PIDController(Constants.Swerve.kPYController, 0, 0),
+            xController,
+            yController,
             theta_controller,
-            self.swerveSubsystem.setModuleStates(),
-            self.swerveSubsystem,
+            self.swerveSubsystem.setModuleStates,
+            requirements,
         )
         command_group = SequentialCommandGroup()
         command_group.addCommands(
@@ -84,6 +90,11 @@ class RobotContainer:
             )
         )
         command_group.addCommands(swerve_controller_command)
+        command_group.addCommands(
+            commands2.InstantCommand(
+                lambda: self.swerveSubsystem.stop_modules()
+            )
+        )
 
         return command_group
 
