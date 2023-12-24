@@ -13,22 +13,24 @@ from Constants import Constants
 
 class SwerveModule:
     def __init__(
-        self,
-        drive_motor_id: int,
-        turning_motor_id: int,
-        drive_motor_reversed: bool,
-        turning_motor_reversed: bool,
-        absolute_encoder_id: int,
-        absolute_encoder_offset: float,
-        absolute_encoder_reversed: bool,
+            self,
+            drive_motor_id: int,
+            turning_motor_id: int,
+            drive_motor_reversed: bool,
+            turning_motor_reversed: bool,
+            absolute_encoder_id: int,
+            absolute_encoder_offset: float,
+            absolute_encoder_reversed: bool,
     ):
         self.absolute_encoder_reversed = absolute_encoder_reversed  # determining if the encoder is reversed or not
         self.feed_forward = SimpleMotorFeedforwardMeters(  #
             Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA
         )
 
-        self.rotation_motor = CANSparkMax(turning_motor_id, CANSparkMax.MotorType.kBrushless)  # creating the rotation motor object
-        self.drive_motor = CANSparkMax(drive_motor_id, CANSparkMax.MotorType.kBrushless)  # creating the driving motor object
+        self.rotation_motor = CANSparkMax(turning_motor_id,
+                                          CANSparkMax.MotorType.kBrushless)  # creating the rotation motor object
+        self.drive_motor = CANSparkMax(drive_motor_id,
+                                       CANSparkMax.MotorType.kBrushless)  # creating the driving motor object
 
         self.internal_rotation_encoder = self.rotation_motor.getEncoder()  # creating the encoder of the rotation motor
         self.angle_controller = self.rotation_motor.getPIDController()  # getting the PID object from the Spark
@@ -36,7 +38,8 @@ class SwerveModule:
         self.drive_encoder = self.drive_motor.getEncoder()  # creating the encoder of the driving motor
         self.drive_controller = self.drive_motor.getPIDController()  # getting the PID object from the Spark
 
-        self.angle_encoder = CANCoder(absolute_encoder_id)  # Creating the object of the CANCoder (the external encoder, which sits on the module).
+        self.angle_encoder = CANCoder(
+            absolute_encoder_id)  # Creating the object of the CANCoder (the external encoder, which sits on the module).
 
         self.last_angle = self.internal_rotation_encoder.getPosition()  # getting the angle of the rotation motor
 
@@ -47,15 +50,17 @@ class SwerveModule:
         self.is_turning_motor_inverted = turning_motor_reversed  # determining if the turning motor is inverted
 
         # confining the motors
-        self.config_angle_encoder()
-        self.config_angle_motor()
+        self.config_rotation_encoder()
+        self.config_rotation_motor()
         self.config_drive_motor()
 
-    def set_desired_state(self, desired_state: SwerveModuleState, is_open_loop: bool, override: bool = False,):
+    # set the behavior for the module
+    def set_desired_state(self, desired_state: SwerveModuleState, is_open_loop: bool, override: bool = False, ):
         desired_state = OnboardModuleState.optimize(desired_state, self.get_state().angle)
         self.set_angle(desired_state, override)
         self.set_speed(desired_state, is_open_loop)
 
+    # sync the internal motor encoder with the absolute encoder
     def reset_to_absolute(self):
         absolute_position = self.angle_encoder.getAbsolutePosition() - self.angle_offset
         desired_state = OnboardModuleState.optimize(
@@ -66,12 +71,14 @@ class SwerveModule:
 
         self.internal_rotation_encoder.setPosition(desired_state.angle.degrees())
 
-    def config_angle_encoder(self):
+    # setting up and configuring the rotation encoder
+    def config_rotation_encoder(self):
         self.angle_encoder.configFactoryDefault()
         CANCoderUtil.set_cancoder_bus_usage(self.angle_encoder, CCUsage.kMinimal)
         self.angle_encoder.configAllSettings(CTREConfigs.swerveCanCoderConfig)
 
-    def config_angle_motor(self):
+    # setting up the rotation motor and configuring it
+    def config_rotation_motor(self):
         # self.angle_motor.restoreFactoryDefaults()
         CANSparkMaxUtil.set_spark_max_bus_usage(self.rotation_motor, Usage.kPositionOnly)
         self.rotation_motor.setSmartCurrentLimit(
@@ -82,15 +89,18 @@ class SwerveModule:
         self.internal_rotation_encoder.setPositionConversionFactor(
             Constants.Swerve.angleConversionFactor
         )
+        # configuring the PID
         self.angle_controller.setP(Constants.Swerve.angleKP)
         self.angle_controller.setI(Constants.Swerve.angleKI)
         self.angle_controller.setD(Constants.Swerve.angleKD)
         self.angle_controller.setFF(Constants.Swerve.angleKFF)
+
         self.rotation_motor.setOpenLoopRampRate(0.0)
         self.rotation_motor.enableVoltageCompensation(Constants.Swerve.voltageComp)
         self.rotation_motor.burnFlash()
         self.reset_to_absolute()
 
+    # setting up the driving motor and configuring it
     def config_drive_motor(self):
         # self.drive_motor.restoreFactoryDefaults()
         CANSparkMaxUtil.set_spark_max_bus_usage(self.drive_motor, Usage.kAll)
@@ -107,12 +117,16 @@ class SwerveModule:
         )
         self.drive_encoder.setPosition(0.0)
         self.drive_motor.setOpenLoopRampRate(Constants.Swerve.openLoopRamp)
+
+        # configuring the PID
         self.drive_controller.setP(Constants.Swerve.angleKP)
         self.drive_controller.setI(Constants.Swerve.angleKI)
         self.drive_controller.setD(Constants.Swerve.angleKD)
         self.drive_controller.setFF(Constants.Swerve.angleKFF)
+
         self.drive_motor.enableVoltageCompensation(Constants.Swerve.voltageComp)
         self.drive_motor.burnFlash()
+
 
     def set_speed(self, desired_state: SwerveModuleState, is_open_loop: bool):
         if is_open_loop:
@@ -128,8 +142,8 @@ class SwerveModule:
 
     def set_angle(self, desired_state: SwerveModuleState, override: bool = False):
         if (
-            abs(desired_state.speed) <= (Constants.Swerve.maxSpeed * 0.01)
-            and not override
+                abs(desired_state.speed) <= (Constants.Swerve.maxSpeed * 0.01)
+                and not override
         ):
             angle = self.last_angle
         else:
@@ -141,9 +155,11 @@ class SwerveModule:
             self.rotation_motor.set(0)
         self.last_angle = angle
 
+    # returns the angle of the module
     def get_angle(self) -> Rotation2d:
         return Rotation2d.fromDegrees(self.internal_rotation_encoder.getPosition())
 
+    # get the angle of the module from the CANCoder
     def get_can_coder(self) -> Rotation2d:
         return Rotation2d.fromDegrees(self.angle_encoder.getAbsolutePosition())
 
@@ -153,9 +169,12 @@ class SwerveModule:
             Rotation2d.fromDegrees(self.internal_rotation_encoder.getPosition()),
         )
 
+    # returns the state (the velocity and the angle) of the module
     def get_state(self) -> SwerveModuleState:
         return SwerveModuleState(self.drive_encoder.getVelocity(), self.get_angle())
 
+    # stop both of the motors (rotation and driving) and sets them to 0
+    # todo: maybe we should change the angle to the offset of the module and not to 0 because then the wheels will be all over the place
     def stop_motors(self) -> None:
         self.rotation_motor.set(0)
         self.drive_motor.set(0)
