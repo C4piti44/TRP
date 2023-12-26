@@ -1,6 +1,11 @@
 import wpilib
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
-from wpimath.kinematics import SwerveDrive4Kinematics, ChassisSpeeds, SwerveModulePosition, SwerveModuleState
+from wpimath.kinematics import (
+    SwerveDrive4Kinematics,
+    ChassisSpeeds,
+    SwerveModulePosition,
+    SwerveModuleState,
+)
 from wpimath.estimator import SwerveDrive4PoseEstimator
 from commands2 import Subsystem
 import commands2
@@ -21,7 +26,6 @@ class SwerveSubsystem(Subsystem):
         )
         self.tLimiter = filter.SlewRateLimiter(
             Constants.DriveConstants.kTeleDriveMaxAngularAccelerationUnitsPerSecond
-            * 1.5
         )
 
         self.gyro = wpilib.ADXRS450_Gyro()
@@ -79,11 +83,11 @@ class SwerveSubsystem(Subsystem):
         )
 
     def get_modules_positions(self) -> tuple[SwerveModulePosition]:
-        positions:tuple[SwerveModulePosition] = (
+        positions: tuple[SwerveModulePosition] = (
             self.frontLeft.get_position(),
             self.frontRight.get_position(),
             self.backLeft.get_position(),
-            self.backRight.get_position()
+            self.backRight.get_position(),
         )
         return positions
 
@@ -157,9 +161,17 @@ class SwerveSubsystem(Subsystem):
             cSpeed, Translation2d()
         )
         self.setModuleStates(moduleState)
-    
+
     def reset_modules(self):
-        self.frontLeft.set_desired_state(SwerveModuleState(0, Rotation2d.fromDegrees(0)), True, False)
-        self.frontRight.set_desired_state(SwerveModuleState(0, Rotation2d.fromDegrees(0)), True, False)
-        self.backLeft.set_desired_state(SwerveModuleState(0, Rotation2d.fromDegrees(0)), True, False)
-        self.backRight.set_desired_state(SwerveModuleState(0, Rotation2d.fromDegrees(0)), True, False)
+        self.frontLeft.set_desired_state(
+            SwerveModuleState(0, Rotation2d.fromDegrees(0)), True, False
+        )
+        self.frontRight.set_desired_state(
+            SwerveModuleState(0, Rotation2d.fromDegrees(0)), True, False
+        )
+        self.backLeft.set_desired_state(
+            SwerveModuleState(0, Rotation2d.fromDegrees(0)), True, False
+        )
+        self.backRight.set_desired_state(
+            SwerveModuleState(0, Rotation2d.fromDegrees(0)), True, False
+        )

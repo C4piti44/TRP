@@ -14,8 +14,8 @@ class Constants:
         invertGyro = False  # Always ensure Gyro is CCW+ CW-
 
         # Drivetrain Constants #
-        trackWidth = 0.59
-        wheelBase = 0.59
+        trackWidth = 0.725
+        wheelBase = 0.725
         wheelDiameter = 4.0 * 0.0254
         wheelCircumference = wheelDiameter * math.pi
 
@@ -42,13 +42,13 @@ class Constants:
         driveContinuousCurrentLimit = 40
 
         # Angle Motor PID Values #
-        angleKP = 0.075  # 0.12669
+        angleKP = 0.1  # 0.12669
         angleKI = 0.0
         angleKD = 0.0
         angleKFF = 0.0
 
         # Drive Motor PID Values #
-        driveKP = 3.3158e-05  # 1.6985E-18
+        driveKP = 0.1  # 1.6985E-18
         driveKI = 0.0
         driveKD = 0.0
         driveKFF = 0.0
@@ -116,10 +116,10 @@ class Constants:
         kFrontRightDriveMotorPort = 7
         kFrontRightTurningMotorPort = 8
         kFrontRightTurningEncoderReversed = True
-        kFrontRightDriveEncoderReversed = True
+        kFrontRightDriveEncoderReversed = False
         kFrontRightDriveAbsoluteEncoderPort = 12
         kFrontRightDriveAbsoluteEncoderReversed = False
-        kFrontRightDriveAbsoluteEncoderOffset = 8.877
+        kFrontRightDriveAbsoluteEncoderOffset = 8.877 + 180
 
         # BackLeft
         kBackLeftDriveMotorPort = 3
