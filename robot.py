@@ -11,9 +11,9 @@ class MyRobot(commands2.TimedCommandRobot):
     def robotInit(self) -> None:
         self.scheduler = commands2.CommandScheduler.getInstance()
         self.container = RobotContainer()
-        #self.container.swerve_subsystem().zeroHeading()
-        #self.container.swerve_subsystem().reset_modules()
-        self.auto_command:commands2.Command = None #self.container.get_autonomous_command()
+        self.container.swerve_subsystem().zeroHeading()
+        self.container.swerve_subsystem().reset_modules()
+        self.auto_command:commands2.Command = self.container.get_autonomous_command()
         self.motor = CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless)
 
     def robotPeriodic(self) -> None:
