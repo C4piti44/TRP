@@ -146,3 +146,21 @@ class Constants:
         kStickDriftLX = 0.1
         kStickDriftLY = 0.1
         kStickDriftRX = 0.1
+
+    class intakeConstants:
+        left_motor_id = 12
+        right_motor_id = 13
+        speed_limit = 0.7
+
+    class elevatorConstants:
+        left_motor_id = 14
+        right_motor_id = 15
+        speed_limit = 0.6
+        kP = 0.1
+        kI = 0
+        kD = 0
+        conversion_factor = 1 / 50
+        hight_position_1 = 0
+        hight_position_2 = 0.5
+        hight_position_3 = 1.5
+        radius_of_spool = 0.05
