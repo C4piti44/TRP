@@ -1,10 +1,8 @@
 import wpilib
 import commands2
 from RobotContainer import RobotContainer
-from rev import (
-    CANSparkMax,
-    CANSparkMaxLowLevel
-)
+from rev import CANSparkMax, CANSparkMaxLowLevel
+
 
 class MyRobot(commands2.TimedCommandRobot):
     # robot
@@ -13,7 +11,7 @@ class MyRobot(commands2.TimedCommandRobot):
         self.container = RobotContainer()
         self.container.swerveSubsystem.zeroHeading()
         self.container.swerveSubsystem.reset_modules()
-        self.auto_command:commands2.Command = self.container.get_autonomous_command()
+        self.auto_command: commands2.Command = self.container.get_autonomous_command()
 
     def robotPeriodic(self) -> None:
         commands2.CommandScheduler.getInstance().run()

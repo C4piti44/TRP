@@ -110,7 +110,7 @@ class Constants:
         kFrontLeftDriveEncoderReversed = False
         kFrontLeftDriveAbsoluteEncoderPort = 9
         kFrontLeftDriveAbsoluteEncoderReversed = False
-        kFrontLeftDriveAbsoluteEncoderOffset = 214.98-180
+        kFrontLeftDriveAbsoluteEncoderOffset = 214.98 - 180
 
         # FrontRight
         kFrontRightDriveMotorPort = 7
@@ -137,7 +137,7 @@ class Constants:
         kBackRightDriveEncoderReversed = True
         kBackRightDriveAbsoluteEncoderPort = 11
         kBackRightDriveAbsoluteEncoderReversed = False
-        kBackRightDriveAbsoluteEncoderOffset = 306.65-90 - 180
+        kBackRightDriveAbsoluteEncoderOffset = 306.65 - 90 - 180
 
     class OIConstants:
         kDriverControllerPort = 0
