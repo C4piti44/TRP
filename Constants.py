@@ -80,8 +80,8 @@ class Constants:
         maxSpeed = 4.6
 
         # Neutral Modes #
-        angleNeutralMode = CANSparkMax.IdleMode.kCoast
-        driveNeutralMode = CANSparkMax.IdleMode.kCoast
+        angleNeutralMode = CANSparkMax.IdleMode.kBrake
+        driveNeutralMode = CANSparkMax.IdleMode.kBrake
 
         # Motor Inverts ##
         driveInvert = False
