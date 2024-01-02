@@ -42,7 +42,7 @@ class Constants:
         driveContinuousCurrentLimit = 40
 
         # Angle Motor PID Values #
-        angleKP = 0.1  # 0.12669
+        angleKP = 0.5  # 0.12669
         angleKI = 0.0
         angleKD = 0.0
         angleKFF = 0.0
@@ -80,8 +80,8 @@ class Constants:
         maxSpeed = 4.6
 
         # Neutral Modes #
-        angleNeutralMode = CANSparkMax.IdleMode.kBrake
-        driveNeutralMode = CANSparkMax.IdleMode.kBrake
+        angleNeutralMode = CANSparkMax.IdleMode.kCoast
+        driveNeutralMode = CANSparkMax.IdleMode.kCoast
 
         # Motor Inverts ##
         driveInvert = False
@@ -110,7 +110,7 @@ class Constants:
         kFrontLeftDriveEncoderReversed = False
         kFrontLeftDriveAbsoluteEncoderPort = 9
         kFrontLeftDriveAbsoluteEncoderReversed = False
-        kFrontLeftDriveAbsoluteEncoderOffset = 214.98 - 180
+        kFrontLeftDriveAbsoluteEncoderOffset = 214.98-180
 
         # FrontRight
         kFrontRightDriveMotorPort = 7
@@ -128,7 +128,7 @@ class Constants:
         kBackLeftDriveEncoderReversed = True
         kBackLeftDriveAbsoluteEncoderPort = 10
         kBackLeftDriveAbsoluteEncoderReversed = False
-        kBackLeftDriveAbsoluteEncoderOffset = 328.184
+        kBackLeftDriveAbsoluteEncoderOffset = 328.184 - 90
 
         # BackRight
         kBackRightDriveMotorPort = 5
@@ -137,7 +137,7 @@ class Constants:
         kBackRightDriveEncoderReversed = True
         kBackRightDriveAbsoluteEncoderPort = 11
         kBackRightDriveAbsoluteEncoderReversed = False
-        kBackRightDriveAbsoluteEncoderOffset = 306.65
+        kBackRightDriveAbsoluteEncoderOffset = 306.65-90 - 180
 
     class OIConstants:
         kDriverControllerPort = 0

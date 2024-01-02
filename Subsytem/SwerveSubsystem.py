@@ -52,16 +52,6 @@ class SwerveSubsystem(Subsystem):
         )
 
         self.backLeft: SwerveModule = SwerveModule(
-            Constants.DriveConstants.kBackLeftDriveMotorPort,
-            Constants.DriveConstants.kBackLeftTurningMotorPort,
-            Constants.DriveConstants.kBackLeftDriveEncoderReversed,
-            Constants.DriveConstants.kBackLeftTurningEncoderReversed,
-            Constants.DriveConstants.kBackLeftDriveAbsoluteEncoderPort,
-            Constants.DriveConstants.kBackLeftDriveAbsoluteEncoderOffset,
-            Constants.DriveConstants.kBackLeftDriveAbsoluteEncoderReversed,
-        )
-
-        self.backRight: SwerveModule = SwerveModule(
             Constants.DriveConstants.kBackRightDriveMotorPort,
             Constants.DriveConstants.kBackRightTurningMotorPort,
             Constants.DriveConstants.kBackRightDriveEncoderReversed,
@@ -69,6 +59,16 @@ class SwerveSubsystem(Subsystem):
             Constants.DriveConstants.kBackRightDriveAbsoluteEncoderPort,
             Constants.DriveConstants.kBackRightDriveAbsoluteEncoderOffset,
             Constants.DriveConstants.kBackRightDriveAbsoluteEncoderReversed,
+        )
+
+        self.backRight: SwerveModule = SwerveModule(
+            Constants.DriveConstants.kBackLeftDriveMotorPort,
+            Constants.DriveConstants.kBackLeftTurningMotorPort,
+            Constants.DriveConstants.kBackLeftDriveEncoderReversed,
+            Constants.DriveConstants.kBackLeftTurningEncoderReversed,
+            Constants.DriveConstants.kBackLeftDriveAbsoluteEncoderPort,
+            Constants.DriveConstants.kBackLeftDriveAbsoluteEncoderOffset,
+            Constants.DriveConstants.kBackLeftDriveAbsoluteEncoderReversed,
         )
         self.odometer = SwerveDrive4PoseEstimator(
             Constants.Swerve.SwerveKinematics,

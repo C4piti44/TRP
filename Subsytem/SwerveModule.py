@@ -109,7 +109,7 @@ class SwerveModule:
 
     # setting up the rotation motor and configuring it
     def config_rotation_motor(self):
-        # self.angle_motor.restoreFactoryDefaults()
+        self.rotation_motor.restoreFactoryDefaults()
         CANSparkMaxUtil.set_spark_max_bus_usage(
             self.rotation_motor, Usage.kPositionOnly
         )
@@ -134,7 +134,7 @@ class SwerveModule:
 
     # setting up the driving motor and configuring it
     def config_drive_motor(self):
-        # self.drive_motor.restoreFactoryDefaults()
+        self.drive_motor.restoreFactoryDefaults()
         CANSparkMaxUtil.set_spark_max_bus_usage(self.drive_motor, Usage.kAll)
         self.drive_motor.setSmartCurrentLimit(
             Constants.Swerve.driveContinuousCurrentLimit

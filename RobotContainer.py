@@ -18,37 +18,34 @@ import math
 
 class RobotContainer:
     def __init__(self):
-        #self.swerveSubsystem = SwerveSubsystem()
+        self.swerveSubsystem = SwerveSubsystem()
 
         self.driverController = commands2.button.CommandXboxController(
             Constants.OIConstants.kDriverControllerPort
         )
-        #self.swerveSubsystem.setDefaultCommand(
-        #    self.swerveSubsystem.run(
-        #        lambda: SwerveSubsystem.drive(
-        #            self.swerveSubsystem,
-        #            self.driverController.getLeftX(),
-        #            self.driverController.getLeftY(),
-        #            self.driverController.getRightX(),
-        #        )
-        #    )
-        #)
-        #self.driverController.B().onTrue(
-        #    commands2.cmd.runOnce(lambda: self.swerveSubsystem.zeroHeading())
-        #)
-        #self.configure_button_bindings()
+        self.swerveSubsystem.setDefaultCommand(
+            self.swerveSubsystem.run(
+                lambda: SwerveSubsystem.drive(
+                    self.swerveSubsystem,
+                    self.driverController.getLeftX(),
+                    self.driverController.getLeftY(),
+                    self.driverController.getRightX(),
+                )
+            )
+        )
+        self.driverController.B().onTrue(
+            commands2.cmd.runOnce(lambda: self.swerveSubsystem.zeroHeading())
+        )
+        self.configure_button_bindings()
         pass
 
     def configure_button_bindings(self):
         pass
 
-    #def get_swerve(self) -> SwerveSubsystem:
-    #    return self.swerveSubsystem
-
-    #def print_joystick(self) -> None:
-    #    print(f"Left Y: {str(self.driverController.getLeftY())}")
-    #    print(f"Left X: {str(self.driverController.getLeftX())}")
-    #    print(f"Right X: {str(self.driverController.getRightX())}")
+    def print_joystick(self) -> None:
+        print(f"Left Y: {str(self.driverController.getLeftY())}")
+        print(f"Left X: {str(self.driverController.getLeftX())}")
+        print(f"Right X: {str(self.driverController.getRightX())}")
 
     def get_autonomous_command(self) -> Command:
         config: TrajectoryConfig = TrajectoryConfig(

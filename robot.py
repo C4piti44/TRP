@@ -11,10 +11,9 @@ class MyRobot(commands2.TimedCommandRobot):
     def robotInit(self) -> None:
         self.scheduler = commands2.CommandScheduler.getInstance()
         self.container = RobotContainer()
-        #self.container.swerve_subsystem().zeroHeading()
-        #self.container.swerve_subsystem().reset_modules()
-        self.auto_command:commands2.Command = None #self.container.get_autonomous_command()
-        self.motor = CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless)
+        self.container.swerveSubsystem.zeroHeading()
+        self.container.swerveSubsystem.reset_modules()
+        self.auto_command:commands2.Command = self.container.get_autonomous_command()
 
     def robotPeriodic(self) -> None:
         commands2.CommandScheduler.getInstance().run()
@@ -35,7 +34,7 @@ class MyRobot(commands2.TimedCommandRobot):
         pass
 
     def teleopPeriodic(self) -> None:
-        self.motor.set(self.container.driverController.getLeftY())
+        pass
 
     def testInit(self) -> None:
         pass
