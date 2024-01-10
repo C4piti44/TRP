@@ -4,14 +4,12 @@ from ctre.sensors import (
     AbsoluteSensorRange,
     SensorInitializationStrategy,
 )
-from Constants import Constants
-
 
 class CTREConfigs:
     swerveCanCoderConfig = CANCoderConfiguration()
 
     swerveCanCoderConfig.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360
-    swerveCanCoderConfig.sensorDirection = Constants.Swerve.canCoderInvert
+    swerveCanCoderConfig.sensorDirection = False
     swerveCanCoderConfig.initializationStrategy = (
         SensorInitializationStrategy.BootToAbsolutePosition
     )
