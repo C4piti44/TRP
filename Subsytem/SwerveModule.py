@@ -43,20 +43,10 @@ class SwerveModule:
         self.config_driveMotor()
         self.config_turningMotor()
 
+        self.last_angle = self.turningEncoder.getPosition()
+
     def get_position(self) -> SwerveModulePosition:
-        return SwerveModulePosition(self.getDrivePosition(),Rotation2d.fromDegrees(self.getTurningPosition()*(math.pi/180)))
-
-    def getDrivePosition(self) -> float:
-        return self.driveEncoder.getPosition()
-
-    def getTurningPosition(self) -> float:
-        return self.turningEncoder.getPosition()
-
-    def getDriveVelocity(self) -> float:
-        return self.driveEncoder.getVelocity()
-
-    def getTurningVelocity(self) -> float:
-        return self.turningEncoder.getVelocity()
+        return SwerveModulePosition(self.driveEncoder.getPosition(),self.get_angle())
 
     # sync the internal motor encoder with the absolute encoder
     def reset_to_absolute(self):
@@ -126,12 +116,14 @@ class SwerveModule:
         return Rotation2d.fromDegrees(self.turningEncoder.getPosition())
 
     def setDesiredState(self, state:SwerveModuleState) -> None:
-        if abs(state.speed) < 0.01:
-            self.stop()
-            return
-        dState = OnboardModuleState.optimize(state, self.get_position().angle)
+        if abs(state.speed) < 0.1:
+            self.driveMotor.set(0)
+        dState = OnboardModuleState.optimize(state, self.getState().angle)
         self.driveMotor.set(dState.speed / DriveConstants.kPhysicalMaxSpeedMetersPerSecond)
-        self.turningPidController.setReference(dState.angle.degrees(), CANSparkMax.ControlType.kPosition)
+        if abs(self.turningEncoder.getPosition() - dState.angle.degrees()) > 1.5:
+            self.turningPidController.setReference(dState.angle.degrees(), CANSparkMax.ControlType.kPosition)
+        else:
+            self.turningMotor.set(0)
 
     def stop(self) -> None:
         self.driveMotor.set(0)

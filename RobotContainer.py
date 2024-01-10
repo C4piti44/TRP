@@ -6,12 +6,14 @@ import commands2.cmd
 import commands2.button
 from wpimath import filter
 
-class RobotContainer:
 
+class RobotContainer:
     def __init__(self):
         self.swerveSubsystem = SwerveSubsystem()
-        
-        self.driverController = commands2.button.CommandXboxController(OIConstants.kDriverControllerPort)
+
+        self.driverController = commands2.button.CommandXboxController(
+            OIConstants.kDriverControllerPort
+        )
         self.swerveSubsystem.setDefaultCommand(
             self.swerveSubsystem.run(
                 lambda: SwerveSubsystem.drive(
@@ -26,9 +28,11 @@ class RobotContainer:
 
     def configure_button_bindings(self):
         pass
+
     def get_autonomous_command(self) -> Command:
         pass
-    
+
+
 if __name__ == "__main__":
     # Instantiate RobotContainer and use its methods as needed
     robot_container = RobotContainer()

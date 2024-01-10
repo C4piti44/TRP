@@ -5,6 +5,7 @@ from ctre.sensors import (
     SensorInitializationStrategy,
 )
 
+
 class CTREConfigs:
     swerveCanCoderConfig = CANCoderConfiguration()
 
