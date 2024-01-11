@@ -18,8 +18,8 @@ class RobotContainer:
             self.swerveSubsystem.run(
                 lambda: SwerveSubsystem.drive(
                     self.swerveSubsystem,
-                    self.driverController.getLeftX(),
                     self.driverController.getLeftY(),
+                    self.driverController.getLeftX(),
                     self.driverController.getRightX(),
                 )
             )

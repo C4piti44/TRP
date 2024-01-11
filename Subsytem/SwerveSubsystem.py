@@ -50,7 +50,7 @@ class SwerveSubsystem(Subsystem):
             DriveConstants.kFrontRightDriveAbsoluteEncoderReversed,
         )
 
-        self.backRight: SwerveModule = SwerveModule(
+        self.backLeft: SwerveModule = SwerveModule(
             DriveConstants.kBackLeftDriveMotorPort,
             DriveConstants.kBackLeftTurningMotorPort,
             DriveConstants.kBackLeftDriveEncoderReversed,
@@ -60,7 +60,7 @@ class SwerveSubsystem(Subsystem):
             DriveConstants.kBackLeftDriveAbsoluteEncoderReversed,
         )
 
-        self.backLeft: SwerveModule = SwerveModule(
+        self.backRight: SwerveModule = SwerveModule(
             DriveConstants.kBackRightDriveMotorPort,
             DriveConstants.kBackRightTurningMotorPort,
             DriveConstants.kBackRightDriveEncoderReversed,
@@ -105,12 +105,6 @@ class SwerveSubsystem(Subsystem):
             self.backLeft.get_position(),
             self.backRight.get_position(),
         )
-
-    def stopModules(self) -> None:
-        self.frontLeft.stop()
-        self.frontRight.stop()
-        self.backLeft.stop()
-        self.backRight.stop()
 
     def setModuleStates(self, desiredStates) -> None:
         SwerveDrive4Kinematics.desaturateWheelSpeeds(

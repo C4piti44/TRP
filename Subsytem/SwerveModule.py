@@ -136,8 +136,10 @@ class SwerveModule:
             self.turningMotor.set(0)
         self.set_speed(desiredState, is_open_loop)
 
-    def set_speed(self, desired_state: SwerveModuleState, is_open_loop: bool):
-        if is_open_loop:
+    def set_speed(self, desired_state: SwerveModuleState, is_open_loop: bool) -> None:
+        if is_open_loop and abs(desired_state.speed) <= DriveConstants.swerve_max_speed*0.01:
+            self.driveMotor.set(0)
+        elif is_open_loop:
             percent_output = desired_state.speed / DriveConstants.swerve_max_speed
             self.driveMotor.set(percent_output)
         else:

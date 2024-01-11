@@ -9,7 +9,7 @@ class ModuleConstants:
     driveKV = 3.2091
     driveKA = 0.35702
     # Angle Motor PID Values
-    angle_kp = 0.005
+    angle_kp = 0.01
     angle_ki = 0.0
     angle_kd = 0.0
     angle_kf = 0.0
@@ -53,19 +53,19 @@ class DriveConstants:
     kFrontLeftDriveMotorPort = 2
     kFrontLeftTurningMotorPort = 1
     kFrontLeftTurningEncoderReversed = True
-    kFrontLeftDriveEncoderReversed = False
+    kFrontLeftDriveEncoderReversed = True
     kFrontLeftDriveAbsoluteEncoderPort = 9
     kFrontLeftDriveAbsoluteEncoderReversed = False
-    kFrontLeftDriveAbsoluteEncoderOffset = 214.98
+    kFrontLeftDriveAbsoluteEncoderOffset = 0
 
     # FrontRight
     kFrontRightDriveMotorPort = 7
     kFrontRightTurningMotorPort = 8
     kFrontRightTurningEncoderReversed = True
-    kFrontRightDriveEncoderReversed = False
+    kFrontRightDriveEncoderReversed = True
     kFrontRightDriveAbsoluteEncoderPort = 12
     kFrontRightDriveAbsoluteEncoderReversed = False
-    kFrontRightDriveAbsoluteEncoderOffset = 8.877 + 180 - 90 - 90
+    kFrontRightDriveAbsoluteEncoderOffset = 0
 
     # BackLeft
     kBackLeftDriveMotorPort = 3
@@ -74,7 +74,7 @@ class DriveConstants:
     kBackLeftDriveEncoderReversed = True
     kBackLeftDriveAbsoluteEncoderPort = 10
     kBackLeftDriveAbsoluteEncoderReversed = False
-    kBackLeftDriveAbsoluteEncoderOffset = 328.184 - 90 - 90
+    kBackLeftDriveAbsoluteEncoderOffset = 0
 
     # BackRight
     kBackRightDriveMotorPort = 5
@@ -83,7 +83,7 @@ class DriveConstants:
     kBackRightDriveEncoderReversed = True
     kBackRightDriveAbsoluteEncoderPort = 11
     kBackRightDriveAbsoluteEncoderReversed = False
-    kBackRightDriveAbsoluteEncoderOffset = 306.65 - 180 - 90
+    kBackRightDriveAbsoluteEncoderOffset = 0
 
     kPhysicalMaxSpeedMetersPerSecond = 4.6
     kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * math.pi
