@@ -58,16 +58,9 @@ class SwerveModule:
 
     # sync the internal motor encoder with the absolute encoder
     def reset_to_absolute(self):
-        absolute_position = (
-            self.absoluteEncoder.getAbsolutePosition() - self.absoluteEncoderOffset
-        )
-        desired_state = OnboardModuleState.optimize(
-            SwerveModuleState(0, Rotation2d.fromDegrees(absolute_position)),
-            self.getState().angle,
-            False,
-        )
-
-        self.absoluteEncoder.setPosition(desired_state.angle.degrees())
+        absolute_position = self.absoluteEncoder.getAbsolutePosition() - self.absoluteEncoderOffset
+        desired_state = OnboardModuleState.optimize(SwerveModuleState(0, Rotation2d.fromDegrees(absolute_position)), self.getState().angle, False)
+        self.turningEncoder.setPosition(desired_state.angle.degrees())
 
     # setting up and configuring the rotation encoder
     def config_rotation_encoder(self):

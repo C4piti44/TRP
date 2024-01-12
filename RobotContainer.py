@@ -18,16 +18,20 @@ class RobotContainer:
             self.swerveSubsystem.run(
                 lambda: SwerveSubsystem.drive(
                     self.swerveSubsystem,
-                    self.driverController.getLeftY(),
-                    self.driverController.getLeftX(),
-                    self.driverController.getRightX(),
+                    -self.driverController.getLeftY(),
+                    -self.driverController.getLeftX(),
+                    -self.driverController.getRightX(),
                 )
             )
         )
         self.configure_button_bindings()
 
     def configure_button_bindings(self):
-        pass
+        self.driverController.B().onTrue(
+            commands2.cmd.runOnce(
+                lambda: self.swerveSubsystem.zeroHeading()
+            )
+        )
 
     def get_autonomous_command(self) -> Command:
         pass
