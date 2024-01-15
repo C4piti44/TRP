@@ -133,7 +133,10 @@ class SwerveModule:
         if is_open_loop and abs(desired_state.speed) <= DriveConstants.swerve_max_speed*0.01:
             self.driveMotor.set(0)
         elif is_open_loop:
-            percent_output = desired_state.speed / DriveConstants.swerve_max_speed
+            percent_output = desired_state.speed#/DriveConstants.swerve_max_speed
+            print(desired_state.speed)
+            if abs(percent_output) > 1:
+                percent_output = abs(percent_output)/percent_output
             self.driveMotor.set(percent_output)
         else:
             self.drive_controller.setReference(

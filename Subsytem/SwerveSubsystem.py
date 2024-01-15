@@ -122,19 +122,6 @@ class SwerveSubsystem(Subsystem):
         ySpeed = ySpeed if abs(ySpeed) > OIConstants.kStickDriftLY else 0.0
         tSpeed = tSpeed if abs(tSpeed) > OIConstants.kStickDriftRX else 0.0
 
-        xSpeed = (
-            self.xLimiter.calculate(xSpeed)
-            * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond
-        )
-        ySpeed = (
-            self.yLimiter.calculate(ySpeed)
-            * DriveConstants.kTeleDriveMaxSpeedMetersPerSecond
-        )
-        tSpeed = (
-            self.tLimiter.calculate(tSpeed)
-            * DriveConstants.kTeleDriveMaxAngularSpeedRadiansPerSecond
-        )
-
         cSpeed: ChassisSpeeds
         if fieldOriented:
             cSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(

@@ -45,7 +45,7 @@ class DriveConstants:
         Translation2d(-kWheelBase / 2, -kTrackWidth / 2),
     )
 
-    swerve_max_speed = 4.6
+    swerve_max_speed = 4
 
     kTeleDriveMaxAccelerationUnitsPerSecond = 3
     kTeleDriveMaxAngularAccelerationUnitsPerSecond = 3
@@ -56,16 +56,16 @@ class DriveConstants:
     kFrontLeftDriveEncoderReversed = True
     kFrontLeftDriveAbsoluteEncoderPort = 9
     kFrontLeftDriveAbsoluteEncoderReversed = False
-    kFrontLeftDriveAbsoluteEncoderOffset = 214.98
+    kFrontLeftDriveAbsoluteEncoderOffset = 33.75
 
     # FrontRight
     kFrontRightDriveMotorPort = 7
     kFrontRightTurningMotorPort = 8
     kFrontRightTurningEncoderReversed = True
-    kFrontRightDriveEncoderReversed = False
+    kFrontRightDriveEncoderReversed = True
     kFrontRightDriveAbsoluteEncoderPort = 12
     kFrontRightDriveAbsoluteEncoderReversed = False
-    kFrontRightDriveAbsoluteEncoderOffset = 360-155.766
+    kFrontRightDriveAbsoluteEncoderOffset = 188.35
 
     # BackLeft
     kBackLeftDriveMotorPort = 3
@@ -74,7 +74,7 @@ class DriveConstants:
     kBackLeftDriveEncoderReversed = True
     kBackLeftDriveAbsoluteEncoderPort = 10
     kBackLeftDriveAbsoluteEncoderReversed = False
-    kBackLeftDriveAbsoluteEncoderOffset = 246.182
+    kBackLeftDriveAbsoluteEncoderOffset = 61.348
 
     # BackRight
     kBackRightDriveMotorPort = 5
@@ -83,7 +83,7 @@ class DriveConstants:
     kBackRightDriveEncoderReversed = True
     kBackRightDriveAbsoluteEncoderPort = 11
     kBackRightDriveAbsoluteEncoderReversed = False
-    kBackRightDriveAbsoluteEncoderOffset = 31.992
+    kBackRightDriveAbsoluteEncoderOffset = 213.926
 
     kPhysicalMaxSpeedMetersPerSecond = 4.6
     kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * math.pi
@@ -116,6 +116,6 @@ class OIConstants:
     kDriverControllerPort = 0
 
     # stick drift values
-    kStickDriftLX = 0.15
-    kStickDriftLY = 0.15
-    kStickDriftRX = 0.15
+    kStickDriftLX = 0.05
+    kStickDriftLY = 0.05
+    kStickDriftRX = 0.05
