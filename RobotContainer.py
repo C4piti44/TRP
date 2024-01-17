@@ -38,7 +38,7 @@ class RobotContainer:
 
     def get_autonomous_command(self) -> Command:
         config: TrajectoryConfig = TrajectoryConfig(
-            DriveConstants.swerve_max_speed, DriveConstants.swerve_max_speed
+            DriveConstants.swerve_max_speed, AutoConstants.kMaxAccelerationMetersPerSecondSquared
         )
         config.setKinematics(DriveConstants.kDriveKinematics)
 
@@ -53,7 +53,7 @@ class RobotContainer:
         )
 
         theta_controller = ProfiledPIDControllerRadians(
-            0.1, 0, 0, AutoConstants.kMaxAccelerationMetersPerSecondSquared
+            0.1, 0, 0, AutoConstants.kThetaControllerConstraints
         )
         theta_controller.enableContinuousInput(-math.pi, math.pi)
 
