@@ -92,7 +92,7 @@ class SwerveSubsystem(Subsystem):
         return Rotation2d.fromDegrees(self.getHeading())
 
     def getPose(self) -> Pose2d:
-        return self.odometer.getPose()
+        return self.odometer.getEstimatedPosition()
 
     def resetOdometry(self, pose: Pose2d) -> None:
         module_positions = (self.frontLeft.get_position(),
