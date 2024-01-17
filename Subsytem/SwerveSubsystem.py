@@ -8,7 +8,7 @@ from wpimath.kinematics import (
 )
 from commands2 import Subsystem
 import commands2
-import math
+from wpimath.estimator import SwerveDrive4PoseEstimator
 from Constants import DriveConstants, OIConstants
 from Subsytem.SwerveModule import SwerveModule
 
@@ -69,9 +69,9 @@ class SwerveSubsystem(Subsystem):
             DriveConstants.kBackRightDriveAbsoluteEncoderOffset,
             DriveConstants.kBackRightDriveAbsoluteEncoderReversed,
         )
-        self.odometer = SwerveDrive4Odometry(
+        self.odometer = SwerveDrive4PoseEstimator(
             DriveConstants.kDriveKinematics,
-            Rotation2d.fromDegrees(self.getHeading()),
+            self.getRotation2d(),
             [
                 self.frontLeft.get_position(),
                 self.frontRight.get_position(),
@@ -95,7 +95,11 @@ class SwerveSubsystem(Subsystem):
         return self.odometer.getPose()
 
     def resetOdometry(self, pose: Pose2d) -> None:
-        self.odometer.resetPosition(pose, self.getRotation2d())
+        module_positions = (self.frontLeft.get_position(),
+                                    self.frontRight.get_position(),
+                                    self.backLeft.get_position(),
+                                    self.backRight.get_position())
+        self.odometer.resetPosition(self.getRotation2d(), module_positions, pose)
 
     def periodic(self) -> None:
         self.odometer.update(

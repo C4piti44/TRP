@@ -8,12 +8,15 @@ class MyRobot(commands2.TimedCommandRobot):
     def robotInit(self) -> None:
         self.scheduler = commands2.CommandScheduler.getInstance()
         self.container = RobotContainer()
+        self.auto_command = self.container.get_autonomous_command()
 
     def robotPeriodic(self) -> None:
         commands2.CommandScheduler.getInstance().run()
 
     # autonomus
     def autonomousInit(self) -> None:
+        if self.auto_command is not None:
+            self.auto_command.schedule()
         pass
 
     def autonomousPeriodic(self) -> None:
@@ -21,7 +24,8 @@ class MyRobot(commands2.TimedCommandRobot):
 
     # teleoperated
     def teleopInit(self) -> None:
-        pass
+        if self.auto_command is not None:
+            self.auto_command.cancel()
 
     def teleopPeriodic(self) -> None:
         pass

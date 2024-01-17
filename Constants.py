@@ -2,7 +2,7 @@ from wpimath.trajectory import TrapezoidProfile
 from wpimath.kinematics import SwerveDrive4Kinematics
 from wpimath.geometry import Translation2d
 import math
-
+from wpimath.trajectory import TrapezoidProfileRadians
 
 class ModuleConstants:
     driveKS = 0.16548
@@ -106,6 +106,9 @@ class AutoConstants:
     kPXController = 1.5
     kPYController = 1.5
     kPThetaController = 3
+    kThetaControllerConstraints = TrapezoidProfileRadians.Constraints(
+        math.pi, math.pi
+    )
 
     kThetaControllerConstraints = TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared
