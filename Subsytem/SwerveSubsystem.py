@@ -5,6 +5,7 @@ from wpimath.kinematics import (
     SwerveDrive4Odometry,
     SwerveDrive4Kinematics,
     ChassisSpeeds,
+    SwerveModulePosition,
 )
 from commands2 import Subsystem
 import commands2
@@ -102,12 +103,15 @@ class SwerveSubsystem(Subsystem):
         self.odometer.resetPosition(self.getRotation2d(), module_positions, pose)
 
     def periodic(self) -> None:
-        self.odometer.update(
-            self.getRotation2d(),
+        module_positions = (
             self.frontLeft.get_position(),
             self.frontRight.get_position(),
             self.backLeft.get_position(),
             self.backRight.get_position(),
+        )
+        self.odometer.update(
+            self.getRotation2d(),
+            module_positions
         )
 
     def setModuleStates(self, desiredStates) -> None:

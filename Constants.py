@@ -107,13 +107,8 @@ class AutoConstants:
     kPYController = 1.5
     kPThetaController = 3
     kThetaControllerConstraints = TrapezoidProfileRadians.Constraints(
-        math.pi, math.pi
-    )
-
-    kThetaControllerConstraints = TrapezoidProfile.Constraints(
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared
     )
-
 
 class OIConstants:
     kDriverControllerPort = 0

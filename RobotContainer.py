@@ -7,13 +7,12 @@ import commands2.button
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 from wpimath.geometry import Pose2d
 from wpimath.controller import PIDController, ProfiledPIDControllerRadians
-from Constants import DriveConstants, ModuleConstants, AutoConstants
+from Constants import DriveConstants, AutoConstants
 import math
 
 class RobotContainer:
     def __init__(self):
         self.swerveSubsystem = SwerveSubsystem()
-
         self.driverController = commands2.button.CommandXboxController(
             OIConstants.kDriverControllerPort
         )
@@ -46,7 +45,6 @@ class RobotContainer:
         pose2d_list.append(Pose2d(0, 0, 0))
         pose2d_list.append(Pose2d(0.5, 0, 10))
         pose2d_list.append(Pose2d(0.5,0.5,20))
-
         trajectory = TrajectoryGenerator.generateTrajectory(
             pose2d_list,
             config,
