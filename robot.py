@@ -29,9 +29,5 @@ class MyRobot(commands2.TimedCommandRobot):
     def teleopPeriodic(self) -> None:
         pass
 
-    def testInit(self) -> None:
-        pass
-
-
 if __name__ == "__main__":
     wpilib.run(MyRobot)
