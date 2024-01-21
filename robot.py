@@ -2,7 +2,7 @@ import wpilib
 import commands2
 from RobotContainer import RobotContainer
 
-class MyRobot(commands2.TimedCommandRobot):
+class MyRobot(commands2.TimedCommandRobot):#this is a basic robot.py file, every time you start a new project your robot.py should look something like this
     # robot
     def robotInit(self) -> None:#this function will run once on enabling the robot
         self.scheduler = commands2.CommandScheduler.getInstance()
