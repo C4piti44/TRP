@@ -4,7 +4,6 @@ from rev import CANSparkMax, CANSparkMaxLowLevel
 from Constants import intakeConstants
 from util.sparkmax_util import CANSparkMaxUtil, Usage
 
-
 class intake(Subsystem):
     def __init__(self) -> None:
         commands2._impl.Subsystem.__init__(self)
@@ -15,9 +14,7 @@ class intake(Subsystem):
         self.left_motor: CANSparkMax = CANSparkMax(
             CANSparkMaxLowLevel.MotorType.kBrushless, intakeConstants.left_motor_id
         )
-        self.config_motors()
-
-    pass
+        self.config_motors() 
 
     def config_motors(self) -> None:
         CANSparkMaxUtil.set_spark_max_bus_usage(

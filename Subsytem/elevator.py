@@ -24,8 +24,6 @@ class elevator(Subsystem):
         )  # getting the encoder from the motor(doesnt matter which one)
         self.config()
 
-    pass
-
     def config(self) -> None:
         # comments on uncommanted lines can be found in the intake.py file
 
@@ -51,8 +49,9 @@ class elevator(Subsystem):
         self.encoder.setPositionConversionFactor(elevatorConstants.conversion_factor)
 
     def move(self, position: float, override: bool = False) -> None:
+        #position could be either power or height to look for
         if override:
-            if position >= 0.8:
+            if abs(position) >= 0.8:
                 print(
                     "To Much Power Was Entered Into The Move Function In The elevator.pi File"
                 )

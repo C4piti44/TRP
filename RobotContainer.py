@@ -28,24 +28,24 @@ class RobotContainer:
     def configure_button_bindings(self):
         # connecting the button press to the subsystem that was made
         self.driverController.Y().onTrue(  # If the Y buttons is pressed execute ONCE the function inside of the lambda
-            commands2.cmd.runOnce(lambda: self.intake.set_motors(0.7), self.intake)
+            commands2.cmd.runOnce(lambda: self.intake.set_motors(0.7))
         )
         self.driverController.Y().onFalse(  # If the Y button is no pressed execute ONCE the function inside of the lambda
-            commands2.cmd.runOnce(lambda: self.intake.set_motors(0), self.intake)
+            commands2.cmd.runOnce(lambda: self.intake.set_motors(0))
         )
 
         self.driverController.A().onTrue(  # if the A button is pressed execute the function inside of the lambda as much as it can
-            commands2.cmd.runOnce(lambda: self.elevator.move(0.6, True), self.elevator)
+            commands2.cmd.runOnce(lambda: self.elevator.move(0.6, True))
         )
         self.driverController.A().onFalse(  # if the A button is NOT pressed execute ONCE the function inside of the lambda
-            commands2.cmd.runOnce(lambda: self.elevator.move(0, True), self.elevator)
+            commands2.cmd.runOnce(lambda: self.elevator.move(0, True),)
         )
 
         self.driverController.B().onTrue(
-            commands2.cmd.runOnce(lambda: self.elevator.move(-0.6, True), self.elevator)
+            commands2.cmd.runOnce(lambda: self.elevator.move(-0.6, True))
         )
         self.driverController.B().onFalse(
-            commands2.cmd.runOnce(lambda: self.elevator.move(0, True), self.elevator)
+            commands2.cmd.runOnce(lambda: self.elevator.move(0, True))
         )
 
     def get_autonomous_command(self) -> Command:
