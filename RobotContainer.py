@@ -28,8 +28,8 @@ class RobotContainer:
         )
         self.configure_button_bindings()
 
-    def configure_button_bindings(self):
-        self.driverController.B().onTrue(
+    def configure_button_bindings(self): 
+        self.driverController.b().onTrue(
             commands2.cmd.runOnce(
                 lambda: self.swerveSubsystem.zeroHeading()
             )

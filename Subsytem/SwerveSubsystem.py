@@ -16,7 +16,6 @@ from Subsytem.SwerveModule import SwerveModule
 
 class SwerveSubsystem(Subsystem):
     def __init__(self) -> None:
-        commands2._impl.Subsystem.__init__(self)
 
         self.gyro = wpilib.ADXRS450_Gyro()
         self.zeroHeading()
