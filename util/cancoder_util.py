@@ -1,4 +1,4 @@
-from ctre.sensors import CANCoder, CANCoderStatusFrame
+from phoenix5.sensors import CANCoder, CANCoderStatusFrame
 from enum import Enum
 
 

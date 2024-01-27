@@ -1,5 +1,5 @@
-from rev import CANSparkMax, CANSparkMaxLowLevel
-from ctre.sensors import CANCoder
+from rev import CANSparkMax
+from phoenix5.sensors import CANCoder
 from wpimath.geometry import Rotation2d
 from wpimath.kinematics import SwerveModuleState, SwerveModulePosition
 from wpimath.controller import SimpleMotorFeedforwardMeters
@@ -34,10 +34,10 @@ class SwerveModule:
         self.absoluteEncoder = CANCoder(absoluteEncoderId)
 
         self.driveMotor = CANSparkMax(
-            driveMotorId, CANSparkMaxLowLevel.MotorType.kBrushless
+            driveMotorId, CANSparkMax.MotorType.kBrushless
         )
         self.turningMotor = CANSparkMax(
-            turningMotorId, CANSparkMaxLowLevel.MotorType.kBrushless
+            turningMotorId, CANSparkMax.MotorType.kBrushless
         )
 
         self.driveEncoder = self.driveMotor.getEncoder()

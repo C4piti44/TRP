@@ -1,4 +1,4 @@
-from rev import CANSparkMax, CANSparkMaxLowLevel
+from rev import CANSparkMax
 from enum import Enum
 
 
@@ -16,39 +16,39 @@ class CANSparkMaxUtil:
         motor: CANSparkMax, usage: Usage, enable_following: bool = False
     ):
         if enable_following:
-            motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus0, 10)
+            motor.setPeriodicFramePeriod(CANSparkMax.PeriodicFrame.kStatus0, 10)
         else:
             motor.setPeriodicFramePeriod(
-                CANSparkMaxLowLevel.PeriodicFrame.kStatus0, 500
+                CANSparkMax.PeriodicFrame.kStatus0, 500
             )
 
         if usage == Usage.kAll:
-            motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 20)
-            motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 20)
-            motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus3, 50)
+            motor.setPeriodicFramePeriod(CANSparkMax.PeriodicFrame.kStatus1, 20)
+            motor.setPeriodicFramePeriod(CANSparkMax.PeriodicFrame.kStatus2, 20)
+            motor.setPeriodicFramePeriod(CANSparkMax.PeriodicFrame.kStatus3, 50)
         elif usage == Usage.kPositionOnly:
             motor.setPeriodicFramePeriod(
-                CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 500
+                CANSparkMax.PeriodicFrame.kStatus1, 500
             )
-            motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 20)
+            motor.setPeriodicFramePeriod(CANSparkMax.PeriodicFrame.kStatus2, 20)
             motor.setPeriodicFramePeriod(
-                CANSparkMaxLowLevel.PeriodicFrame.kStatus3, 500
+                CANSparkMax.PeriodicFrame.kStatus3, 500
             )
         elif usage == Usage.kVelocityOnly:
-            motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 20)
+            motor.setPeriodicFramePeriod(CANSparkMax.PeriodicFrame.kStatus1, 20)
             motor.setPeriodicFramePeriod(
-                CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 500
+                CANSparkMax.PeriodicFrame.kStatus2, 500
             )
             motor.setPeriodicFramePeriod(
-                CANSparkMaxLowLevel.PeriodicFrame.kStatus3, 500
+                CANSparkMax.PeriodicFrame.kStatus3, 500
             )
         elif usage == Usage.kMinimal:
             motor.setPeriodicFramePeriod(
-                CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 500
+                CANSparkMax.PeriodicFrame.kStatus1, 500
             )
             motor.setPeriodicFramePeriod(
-                CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 500
+                CANSparkMax.PeriodicFrame.kStatus2, 500
             )
             motor.setPeriodicFramePeriod(
-                CANSparkMaxLowLevel.PeriodicFrame.kStatus3, 500
+                CANSparkMax.PeriodicFrame.kStatus3, 500
             )

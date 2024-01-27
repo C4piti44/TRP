@@ -1,4 +1,4 @@
-from commands2 import Command, Subsystem, Swerve4ControllerCommand, SequentialCommandGroup
+from commands2 import Command, Subsystem#, Swerve4ControllerCommand, SequentialCommandGroup
 from Constants import OIConstants
 from Subsytem.SwerveSubsystem import SwerveSubsystem
 import commands2
@@ -36,6 +36,7 @@ class RobotContainer:
         )
 
     def get_autonomous_command(self) -> Command:
+        return None
         config: TrajectoryConfig = TrajectoryConfig(
             DriveConstants.swerve_max_speed, AutoConstants.kMaxAccelerationMetersPerSecondSquared
         )

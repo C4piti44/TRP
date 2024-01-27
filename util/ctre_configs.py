@@ -1,4 +1,4 @@
-from ctre.sensors import (
+from phoenix5.sensors import (
     CANCoderConfiguration,
     SensorTimeBase,
     AbsoluteSensorRange,
