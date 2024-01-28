@@ -1,3 +1,4 @@
+from commands2 import Command
 import commands2.cmd
 import commands2.button
 
