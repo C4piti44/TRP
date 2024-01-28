@@ -1,5 +1,6 @@
 import wpilib
 import commands2
+from rev import CANSparkMax
 from RobotContainer import RobotContainer
 
 class MyRobot(commands2.TimedCommandRobot):
@@ -8,6 +9,8 @@ class MyRobot(commands2.TimedCommandRobot):
         self.scheduler = commands2.CommandScheduler.getInstance()
         self.container = RobotContainer()
         self.auto_command = self.container.get_autonomous_command()
+        self.motor1 = CANSparkMax(9, CANSparkMax.MotorType.kBrushless)
+        self.motor2 = CANSparkMax(10, CANSparkMax.MotorType.kBrushless)
 
     def robotPeriodic(self) -> None:
         commands2.CommandScheduler.getInstance().run()
@@ -27,7 +30,8 @@ class MyRobot(commands2.TimedCommandRobot):
             self.auto_command.cancel()
 
     def teleopPeriodic(self) -> None:
-        pass
+        self.motor1.set(0.9)
+        self.motor2.set(-0.9)
 
 if __name__ == "__main__":
     wpilib.run(MyRobot)
