@@ -48,7 +48,6 @@ class SwerveModule:
 
         self.turningPidController = self.turningMotor.getPIDController()
         self.drive_controller = self.driveMotor.getPIDController()
-
         self.config_rotation_encoder()
         self.config_driveMotor()
         self.config_turningMotor()
@@ -118,7 +117,7 @@ class SwerveModule:
         return Rotation2d.fromDegrees(self.turningEncoder.getPosition())
 
     def setDesiredState(
-        self, state: SwerveModuleState, is_open_loop: bool, override: bool = False
+        self, state: SwerveModuleState, is_open_loop: bool
     ) -> None:
         desiredState = OnboardModuleState.optimize(state, self.getState().angle)
         if abs(desiredState.angle.degrees() - self.turningEncoder.getPosition()) > 0.6:
