@@ -1,4 +1,10 @@
-from commands2 import Command, Subsystem#, Swerve4ControllerCommand, SequentialCommandGroup
+from typing import Tuple
+from commands2 import (
+    Command,
+    Subsystem,
+    SwerveControllerCommand,
+    SequentialCommandGroup,
+)
 from Constants import OIConstants
 from Subsytem.SwerveSubsystem import SwerveSubsystem
 import commands2
@@ -6,9 +12,14 @@ import commands2.cmd
 import commands2.button
 from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
 from wpimath.geometry import Pose2d
-from wpimath.controller import PIDController, ProfiledPIDControllerRadians
+from wpimath.controller import (
+    PIDController,
+    ProfiledPIDControllerRadians,
+    HolonomicDriveController,
+)
 from Constants import DriveConstants, AutoConstants
 import math
+
 
 class RobotContainer:
     def __init__(self):
@@ -20,32 +31,32 @@ class RobotContainer:
             self.swerveSubsystem.run(
                 lambda: SwerveSubsystem.drive(
                     self.swerveSubsystem,
-                    -self.driverController.getLeftY(),
-                    -self.driverController.getLeftX(),
+                    self.driverController.getLeftY(),
+                    self.driverController.getLeftX(),
                     -self.driverController.getRightX(),
                 )
             )
         )
         self.configure_button_bindings()
 
-    def configure_button_bindings(self): 
+    def configure_button_bindings(self):
         self.driverController.b().onTrue(
-            commands2.cmd.runOnce(
-                lambda: self.swerveSubsystem.zeroHeading()
-            )
+            commands2.cmd.runOnce(lambda: self.swerveSubsystem.zeroHeading())
         )
+        pass
 
     def get_autonomous_command(self) -> Command:
-        return None
         config: TrajectoryConfig = TrajectoryConfig(
-            DriveConstants.swerve_max_speed, AutoConstants.kMaxAccelerationMetersPerSecondSquared
+            DriveConstants.swerve_max_speed,
+            AutoConstants.kMaxAccelerationMetersPerSecondSquared,
         )
         config.setKinematics(DriveConstants.kDriveKinematics)
 
         pose2d_list: list[Pose2d] = list()
         pose2d_list.append(Pose2d(0, 0, 0))
-        pose2d_list.append(Pose2d(0.5, 0, 10))
-        pose2d_list.append(Pose2d(0.5,0.5,20))
+        pose2d_list.append(Pose2d(0.5, 0, 0))
+        pose2d_list.append(Pose2d(0.5, 0.5, 0))
+        pose2d_list.append(Pose2d(0, 0, 0))
         trajectory = TrajectoryGenerator.generateTrajectory(
             pose2d_list,
             config,
@@ -56,21 +67,21 @@ class RobotContainer:
         )
         theta_controller.enableContinuousInput(-math.pi, math.pi)
 
-        requirements: list[Subsystem] = list()
-        requirements.append(self.swerveSubsystem)
-
         xController = PIDController(AutoConstants.kPXController, 0, 0)
         yController = PIDController(AutoConstants.kPYController, 0, 0)
 
-        swerve_controller_command = Swerve4ControllerCommand(
+        holController: HolonomicDriveController = HolonomicDriveController(
+            xController, yController, theta_controller
+        )
+        req: Tuple[Subsystem] = (self.swerveSubsystem,)
+
+        swerve_controller_command = SwerveControllerCommand(
             trajectory,
             self.swerveSubsystem.getPose,
             DriveConstants.kDriveKinematics,
-            xController,
-            yController,
-            theta_controller,
+            holController,
             self.swerveSubsystem.setModuleStates,
-            requirements,
+            requirements=req,
         )
         command_group = SequentialCommandGroup()
         command_group.addCommands(
@@ -81,9 +92,3 @@ class RobotContainer:
         command_group.addCommands(swerve_controller_command)
 
         return command_group
-
-if __name__ == "__main__":
-    # Instantiate RobotContainer and use its methods as needed
-    robot_container = RobotContainer()
-    auto_command = robot_container.get_autonomous_command()
-    # ... Rest of your robot code ...

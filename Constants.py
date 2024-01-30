@@ -1,8 +1,8 @@
-from wpimath.trajectory import TrapezoidProfile
 from wpimath.kinematics import SwerveDrive4Kinematics
 from wpimath.geometry import Translation2d
 import math
 from wpimath.trajectory import TrapezoidProfileRadians
+
 
 class ModuleConstants:
     driveKS = 0.16548
@@ -36,8 +36,8 @@ class ModuleConstants:
 
 
 class DriveConstants:
-    kTrackWidth = 0.725
-    kWheelBase = 0.725
+    kTrackWidth = 0.75
+    kWheelBase = 0.75
     kDriveKinematics = SwerveDrive4Kinematics(
         Translation2d(kWheelBase / 2, kTrackWidth / 2),
         Translation2d(kWheelBase / 2, -kTrackWidth / 2),
@@ -53,38 +53,36 @@ class DriveConstants:
     kFrontLeftDriveMotorPort = 2
     kFrontLeftTurningMotorPort = 1
     kFrontLeftTurningEncoderReversed = True
-    kFrontLeftDriveEncoderReversed = True
+    kFrontLeftDriveEncoderReversed = False
     kFrontLeftDriveAbsoluteEncoderPort = 9
     kFrontLeftDriveAbsoluteEncoderReversed = False
-    kFrontLeftDriveAbsoluteEncoderOffset = 33.75
+    kFrontLeftDriveAbsoluteEncoderOffset = 208.125
 
     # FrontRight
     kFrontRightDriveMotorPort = 7
     kFrontRightTurningMotorPort = 8
     kFrontRightTurningEncoderReversed = True
-    kFrontRightDriveEncoderReversed = True
+    kFrontRightDriveEncoderReversed = False
     kFrontRightDriveAbsoluteEncoderPort = 12
     kFrontRightDriveAbsoluteEncoderReversed = False
-    kFrontRightDriveAbsoluteEncoderOffset = 188.35
+    kFrontRightDriveAbsoluteEncoderOffset = 100.195
 
     # BackLeft
     kBackLeftDriveMotorPort = 3
     kBackLeftTurningMotorPort = 4
     kBackLeftTurningEncoderReversed = True
-    kBackLeftDriveEncoderReversed = True
+    kBackLeftDriveEncoderReversed = False
     kBackLeftDriveAbsoluteEncoderPort = 10
     kBackLeftDriveAbsoluteEncoderReversed = False
-    kBackLeftDriveAbsoluteEncoderOffset = 61.348
-
+    kBackLeftDriveAbsoluteEncoderOffset = 330.820
     # BackRight
     kBackRightDriveMotorPort = 5
     kBackRightTurningMotorPort = 6
     kBackRightTurningEncoderReversed = True
-    kBackRightDriveEncoderReversed = True
+    kBackRightDriveEncoderReversed = False
     kBackRightDriveAbsoluteEncoderPort = 11
     kBackRightDriveAbsoluteEncoderReversed = False
-    kBackRightDriveAbsoluteEncoderOffset = 213.926
-
+    kBackRightDriveAbsoluteEncoderOffset = 218.936
     kPhysicalMaxSpeedMetersPerSecond = 4.6
     kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * math.pi
 
@@ -110,10 +108,11 @@ class AutoConstants:
         kMaxAngularSpeedRadiansPerSecond, kMaxAngularAccelerationRadiansPerSecondSquared
     )
 
+
 class OIConstants:
     kDriverControllerPort = 0
 
     # stick drift values
-    kStickDriftLX = 0.05
-    kStickDriftLY = 0.05
-    kStickDriftRX = 0.05
+    kStickDriftLX = 0.1
+    kStickDriftLY = 0.1
+    kStickDriftRX = 0.1

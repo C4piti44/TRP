@@ -8,7 +8,6 @@ from wpimath.kinematics import (
     SwerveModulePosition,
 )
 from commands2 import Subsystem
-import commands2
 from wpimath.estimator import SwerveDrive4PoseEstimator
 from Constants import DriveConstants, OIConstants
 from Subsytem.SwerveModule import SwerveModule
@@ -16,7 +15,6 @@ from Subsytem.SwerveModule import SwerveModule
 
 class SwerveSubsystem(Subsystem):
     def __init__(self) -> None:
-
         self.gyro = wpilib.ADXRS450_Gyro()
         self.zeroHeading()
 
@@ -50,7 +48,7 @@ class SwerveSubsystem(Subsystem):
             DriveConstants.kFrontRightDriveAbsoluteEncoderReversed,
         )
 
-        self.backRight: SwerveModule = SwerveModule(
+        self.backLeft: SwerveModule = SwerveModule(
             DriveConstants.kBackLeftDriveMotorPort,
             DriveConstants.kBackLeftTurningMotorPort,
             DriveConstants.kBackLeftDriveEncoderReversed,
@@ -60,7 +58,7 @@ class SwerveSubsystem(Subsystem):
             DriveConstants.kBackLeftDriveAbsoluteEncoderReversed,
         )
 
-        self.backLeft: SwerveModule = SwerveModule(
+        self.backRight: SwerveModule = SwerveModule(
             DriveConstants.kBackRightDriveMotorPort,
             DriveConstants.kBackRightTurningMotorPort,
             DriveConstants.kBackRightDriveEncoderReversed,
@@ -72,12 +70,12 @@ class SwerveSubsystem(Subsystem):
         self.odometer = SwerveDrive4PoseEstimator(
             DriveConstants.kDriveKinematics,
             self.getRotation2d(),
-            [
+            (
                 self.frontLeft.get_position(),
                 self.frontRight.get_position(),
                 self.backLeft.get_position(),
                 self.backRight.get_position(),
-            ],
+            ),
             Pose2d(),
         )
 
@@ -95,10 +93,12 @@ class SwerveSubsystem(Subsystem):
         return self.odometer.getEstimatedPosition()
 
     def resetOdometry(self, pose: Pose2d) -> None:
-        module_positions = (self.frontLeft.get_position(),
-                                    self.frontRight.get_position(),
-                                    self.backLeft.get_position(),
-                                    self.backRight.get_position())
+        module_positions = (
+            self.frontLeft.get_position(),
+            self.frontRight.get_position(),
+            self.backLeft.get_position(),
+            self.backRight.get_position(),
+        )
         self.odometer.resetPosition(self.getRotation2d(), module_positions, pose)
 
     def periodic(self) -> None:
@@ -108,19 +108,16 @@ class SwerveSubsystem(Subsystem):
             self.backLeft.get_position(),
             self.backRight.get_position(),
         )
-        self.odometer.update(
-            self.getRotation2d(),
-            module_positions
-        )
+        self.odometer.update(self.getRotation2d(), module_positions)
 
     def setModuleStates(self, desiredStates) -> None:
         SwerveDrive4Kinematics.desaturateWheelSpeeds(
             desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond
         )
-        self.frontLeft.setDesiredState(desiredStates[0], True)
-        self.frontRight.setDesiredState(desiredStates[1], True)
-        self.backLeft.setDesiredState(desiredStates[2], True)
-        self.backRight.setDesiredState(desiredStates[3], True)
+        self.frontLeft.setDesiredState(desiredStates[3], True)
+        self.frontRight.setDesiredState(desiredStates[0], True)
+        self.backLeft.setDesiredState(desiredStates[1], True)
+        self.backRight.setDesiredState(desiredStates[2], True)
 
     def drive(
         self, xSpeed: float, ySpeed: float, tSpeed: float, fieldOriented: bool = True

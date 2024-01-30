@@ -33,9 +33,7 @@ class SwerveModule:
         self.absoluteEncoderReversed = absoluteEncoderReversed
         self.absoluteEncoder = CANCoder(absoluteEncoderId)
 
-        self.driveMotor = CANSparkMax(
-            driveMotorId, CANSparkMax.MotorType.kBrushless
-        )
+        self.driveMotor = CANSparkMax(driveMotorId, CANSparkMax.MotorType.kBrushless)
         self.turningMotor = CANSparkMax(
             turningMotorId, CANSparkMax.MotorType.kBrushless
         )
@@ -57,8 +55,14 @@ class SwerveModule:
 
     # sync the internal motor encoder with the absolute encoder
     def reset_to_absolute(self):
-        absolute_position = self.absoluteEncoder.getAbsolutePosition() - self.absoluteEncoderOffset
-        desired_state = OnboardModuleState.optimize(SwerveModuleState(0, Rotation2d.fromDegrees(absolute_position)), self.getState().angle, False)
+        absolute_position = (
+            self.absoluteEncoder.getAbsolutePosition() - self.absoluteEncoderOffset
+        )
+        desired_state = OnboardModuleState.optimize(
+            SwerveModuleState(0, Rotation2d.fromDegrees(absolute_position)),
+            self.getState().angle,
+            False,
+        )
         self.turningEncoder.setPosition(desired_state.angle.degrees())
 
     # setting up and configuring the rotation encoder
@@ -116,9 +120,7 @@ class SwerveModule:
     def get_angle(self) -> Rotation2d:
         return Rotation2d.fromDegrees(self.turningEncoder.getPosition())
 
-    def setDesiredState(
-        self, state: SwerveModuleState, is_open_loop: bool
-    ) -> None:
+    def setDesiredState(self, state: SwerveModuleState, is_open_loop: bool) -> None:
         desiredState = OnboardModuleState.optimize(state, self.getState().angle)
         if abs(desiredState.angle.degrees() - self.turningEncoder.getPosition()) > 0.6:
             self.turningPidController.setReference(
@@ -129,13 +131,15 @@ class SwerveModule:
         self.set_speed(desiredState, is_open_loop)
 
     def set_speed(self, desired_state: SwerveModuleState, is_open_loop: bool) -> None:
-        if is_open_loop and abs(desired_state.speed) <= DriveConstants.swerve_max_speed*0.01:
+        if (
+            is_open_loop
+            and abs(desired_state.speed) <= DriveConstants.swerve_max_speed * 0.05
+        ):
             self.driveMotor.set(0)
         elif is_open_loop:
-            percent_output = desired_state.speed#/DriveConstants.swerve_max_speed
-            print(desired_state.speed)
+            percent_output = desired_state.speed / 2
             if abs(percent_output) > 1:
-                percent_output = abs(percent_output)/percent_output
+                percent_output = abs(percent_output) / percent_output
             self.driveMotor.set(percent_output)
         else:
             self.drive_controller.setReference(
