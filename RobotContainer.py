@@ -20,7 +20,6 @@ from wpimath.controller import (
 from Constants import DriveConstants, AutoConstants
 import math
 
-
 class RobotContainer:
     def __init__(self):
         self.swerveSubsystem = SwerveSubsystem()
