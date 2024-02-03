@@ -4,6 +4,7 @@ from RobotContainer import RobotContainer
 from ntcore import NetworkTableInstance
 from rev import CANSparkMax
 
+
 class MyRobot(commands2.TimedCommandRobot):
     # robot
     def robotInit(self) -> None:

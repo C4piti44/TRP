@@ -1,24 +1,15 @@
-from typing import Tuple
-from commands2 import (
-    Command,
-    Subsystem,
-    SwerveControllerCommand,
-    SequentialCommandGroup,
-)
+from commands2 import Command, SequentialCommandGroup
 from Constants import OIConstants
 from Subsytem.SwerveSubsystem import SwerveSubsystem
 import commands2
 import commands2.cmd
 import commands2.button
-from wpimath.trajectory import TrajectoryConfig, TrajectoryGenerator
-from wpimath.geometry import Pose2d
-from wpimath.controller import (
-    PIDController,
-    ProfiledPIDControllerRadians,
-    HolonomicDriveController,
-)
-from Constants import DriveConstants, AutoConstants
-import math
+import wpilib
+from pathplannerlib.path import PathPlannerPath
+from pathplannerlib.commands import FollowPathCommand
+from pathplannerlib.controller import PathFollowingController
+from pathplannerlib.config import ReplanningConfig
+
 
 class RobotContainer:
     def __init__(self):
@@ -45,50 +36,35 @@ class RobotContainer:
         pass
 
     def get_autonomous_command(self) -> Command:
-        config: TrajectoryConfig = TrajectoryConfig(
-            DriveConstants.swerve_max_speed,
-            AutoConstants.kMaxAccelerationMetersPerSecondSquared,
+        ppConfig: ReplanningConfig = ReplanningConfig(True, True, 0.2, 0.2)
+        ppController: PathFollowingController = PathFollowingController()
+        path: PathPlannerPath = PathPlannerPath.fromPathFile(
+            "~/Documents/deploy/pathplanner/paths/Note 1.path"
         )
-        config.setKinematics(DriveConstants.kDriveKinematics)
-
-        pose2d_list: list[Pose2d] = list()
-        pose2d_list.append(Pose2d(0, 0, 0))
-        pose2d_list.append(Pose2d(-0.5, 0, 0))
-        pose2d_list.append(Pose2d(-0.5,-0.5,0))
-        pose2d_list.append(Pose2d(0,-0.5,0))
-        pose2d_list.append(Pose2d(0, 0, 0))
-        trajectory = TrajectoryGenerator.generateTrajectory(
-            pose2d_list,
-            config,
-        )
-
-        theta_controller = ProfiledPIDControllerRadians(
-            0.1, 0, 0, AutoConstants.kThetaControllerConstraints
-        )
-        theta_controller.enableContinuousInput(-math.pi, math.pi)
-
-        xController = PIDController(AutoConstants.kPXController, 0, 0)
-        yController = PIDController(AutoConstants.kPYController, 0, 0)
-
-        holController: HolonomicDriveController = HolonomicDriveController(
-            xController, yController, theta_controller
-        )
-        req: Tuple[Subsystem] = (self.swerveSubsystem,)
-
-        swerve_controller_command = SwerveControllerCommand(
-            trajectory,
+        path_follower_command: FollowPathCommand = FollowPathCommand(
+            path,
             self.swerveSubsystem.getPose,
-            DriveConstants.kDriveKinematics,
-            holController,
-            self.swerveSubsystem.setModuleStates,
-            requirements=req,
+            self.swerveSubsystem.getCSpeed,
+            self.swerveSubsystem.updateAutoCSpeed,
+            ppController,
+            ppConfig,
+            self.shouldFlipAutoPath,
         )
         command_group = SequentialCommandGroup()
         command_group.addCommands(
             commands2.InstantCommand(
-                lambda: self.swerveSubsystem.resetOdometry(trajectory.initialPose())
+                lambda: self.swerveSubsystem.resetOdometry(
+                    path.getStartingDifferentialPose()
+                )
             )
         )
-        command_group.addCommands(swerve_controller_command)
+        command_group.addCommands(path_follower_command)
 
         return command_group
+
+    def getAlliance(self) -> wpilib.DriverStation.Alliance | None:
+        return wpilib.DriverStation.getAlliance()
+
+    def shouldFlipAutoPath(self) -> bool:
+        color: wpilib.DriverStation.Alliance | None = self.getAlliance()
+        return color == wpilib.DriverStation.Alliance.kBlue

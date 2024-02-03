@@ -1,20 +1,19 @@
 import wpilib
 from wpimath import filter
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
-from wpimath.kinematics import (
-    SwerveDrive4Odometry,
-    SwerveDrive4Kinematics,
-    ChassisSpeeds,
-    SwerveModulePosition,
-)
+from wpimath.kinematics import SwerveDrive4Kinematics, ChassisSpeeds
 from commands2 import Subsystem
 from wpimath.estimator import SwerveDrive4PoseEstimator
 from Constants import DriveConstants, OIConstants
+from wpimath.geometry import Rotation2d
 from Subsytem.SwerveModule import SwerveModule
 
 
 class SwerveSubsystem(Subsystem):
     def __init__(self) -> None:
+        self.autoCSpeed: ChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+            0, 0, 0, Rotation2d.fromDegrees(0)
+        )
         self.gyro = wpilib.ADXRS450_Gyro()
         self.zeroHeading()
 
@@ -134,7 +133,22 @@ class SwerveSubsystem(Subsystem):
         else:
             cSpeed = ChassisSpeeds(xSpeed, ySpeed, tSpeed)
 
+        self.autoCSpeed = ChassisSpeeds(xSpeed, ySpeed, tSpeed)
+
         moduleState = DriveConstants.kDriveKinematics.toSwerveModuleStates(
             cSpeed, Translation2d()
         )
         self.setModuleStates(moduleState)
+
+    def autoDrive(self, speed: ChassisSpeeds):
+        moduleState = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+            speed, Translation2d()
+        )
+        self.setModuleStates(moduleState)
+
+    def getCSpeed(self) -> ChassisSpeeds:
+        return self.autoCSpeed
+
+    def updateAutoCSpeed(self, speed: ChassisSpeeds) -> None:
+        self.autoCSpeed = speed
+        self.autoDrive(speed)
