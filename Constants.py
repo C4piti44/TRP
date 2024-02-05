@@ -4,6 +4,25 @@ import math
 from wpimath.trajectory import TrapezoidProfileRadians
 
 
+class IntakeConstants:
+    motorID = 13
+    intakePower = 0.5
+    outtakePower = -0.5
+
+
+class ConveyanceConstants:
+    topMotorID = 11
+    bottomMotorID = 12
+    moveForwardPower = 0.5
+    moveBackwardsPower = -0.5
+
+
+class ShooterConstants:
+    leftMotorID = 10
+    rightMotorID = 9
+    shootPower = 0.85
+
+
 class ModuleConstants:
     driveKS = 0.16548
     driveKV = 3.2091

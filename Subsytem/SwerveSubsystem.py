@@ -11,9 +11,7 @@ from Subsytem.SwerveModule import SwerveModule
 
 class SwerveSubsystem(Subsystem):
     def __init__(self) -> None:
-        self.autoCSpeed: ChassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-            0, 0, 0, Rotation2d.fromDegrees(0)
-        )
+        self.autoCSpeed: ChassisSpeeds = ChassisSpeeds(0, 0, 0)
         self.gyro = wpilib.ADXRS450_Gyro()
         self.zeroHeading()
 

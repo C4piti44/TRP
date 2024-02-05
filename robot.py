@@ -2,7 +2,6 @@ import wpilib
 import commands2
 from RobotContainer import RobotContainer
 from ntcore import NetworkTableInstance
-from rev import CANSparkMax
 
 
 class MyRobot(commands2.TimedCommandRobot):
@@ -12,8 +11,6 @@ class MyRobot(commands2.TimedCommandRobot):
         self.container = RobotContainer()
         self.auto_command = self.container.get_autonomous_command()
         self.limelight = NetworkTableInstance.getDefault().getTable("limelight")
-        self.motor1 = CANSparkMax(9, CANSparkMax.MotorType.kBrushless)
-        self.motor2 = CANSparkMax(10, CANSparkMax.MotorType.kBrushless)
 
     def robotPeriodic(self) -> None:
         commands2.CommandScheduler.getInstance().run()
@@ -33,8 +30,6 @@ class MyRobot(commands2.TimedCommandRobot):
             self.auto_command.cancel()
 
     def teleopPeriodic(self) -> None:
-        self.motor1.set(1)
-        self.motor2.set(-1)
         pass
 
     def testInit(self) -> None:
