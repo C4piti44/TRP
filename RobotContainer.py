@@ -5,7 +5,7 @@ from Constants import (
     ModuleConstants,
     ConveyanceConstants,
     ShooterConstants,
-    Intake,
+    IntakeConstants,
 )
 from Subsytem.SwerveSubsystem import SwerveSubsystem
 import commands2
@@ -82,8 +82,8 @@ class RobotContainer:
 
     def get_autonomous_command(self) -> Command:
         config: HolonomicPathFollowerConfig = HolonomicPathFollowerConfig(
-            PIDConstants(0.1, 0, 0),
-            PIDConstants(0.1, 0, 0),
+            PIDConstants(0.5, 0, 0),
+            PIDConstants(0.5, 0, 0),
             DriveConstants.swerve_max_speed,
             ModuleConstants.kWheelDiameterMeters / 2,
             ReplanningConfig(),
@@ -100,7 +100,7 @@ class RobotContainer:
         )
 
         path: PathPlannerPath = PathPlannerPath.fromPathFile("Note1")
-        path_follower_command: Command = AutoBuilder.followPath(path)
+        path_follower_command:Command = AutoBuilder.followPath(path)
         command_group = SequentialCommandGroup()
         command_group.addCommands(path_follower_command)
 
