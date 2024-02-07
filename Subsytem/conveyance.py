@@ -11,12 +11,15 @@ class Conveyance(commands2.Subsystem):
         self.topMotor: rev.CANSparkMax = rev.CANSparkMax(
             ConveyanceConstants.topMotorID, rev.CANSparkMax.MotorType.kBrushless
         )
-        self.bottomMotor.setIdleMode(rev.CANSparkMax.IdleMode.kBrake)
-        self.topMotor.setIdleMode(rev.CANSparkMax.IdleMode.kBrake)
+        self.bottomMotor.setIdleMode(rev.CANSparkMax.IdleMode.kCoast)
+        self.topMotor.setIdleMode(rev.CANSparkMax.IdleMode.kCoast)
+
+        self.bottomMotor.setSmartCurrentLimit(20)
+        self.topMotor.setSmartCurrentLimit(20)
 
     def move(self, power: float) -> None:
         if abs(power) > 1:
             print("Too Much Power Entered To The Conveyance Motors")
             return
         self.bottomMotor.set(power)
-        self.topMotor.set(-power)
+        self.topMotor.set(power)

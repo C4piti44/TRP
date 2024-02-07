@@ -8,6 +8,7 @@ class Intake(Subsystem):
         self.motor: CANSparkMax = CANSparkMax(
             IntakeConstants.motorID, CANSparkMax.MotorType.kBrushless
         )
+        self.motor.setSmartCurrentLimit(20)
 
     def move(self, power: float) -> None:
         if abs(power) > 1:

@@ -72,7 +72,7 @@ class RobotContainer:
         # shooter
         self.driverController.x().onTrue(
             commands2.cmd.runOnce(
-                lambda: self.shooter.shoot(ShooterConstants.shootPower)
+                lambda: self.shooter.shoot(-ShooterConstants.shootPower)
             )
         )
         self.driverController.x().onFalse(
@@ -82,8 +82,8 @@ class RobotContainer:
 
     def get_autonomous_command(self) -> Command:
         config: HolonomicPathFollowerConfig = HolonomicPathFollowerConfig(
-            PIDConstants(0.5, 0, 0),
-            PIDConstants(0.5, 0, 0),
+            PIDConstants(0.1, 0, 0),
+            PIDConstants(0.1, 0, 0),
             DriveConstants.swerve_max_speed,
             ModuleConstants.kWheelDiameterMeters / 2,
             ReplanningConfig(),
@@ -99,7 +99,7 @@ class RobotContainer:
             self.swerveSubsystem,
         )
 
-        path: PathPlannerPath = PathPlannerPath.fromPathFile("Note1")
+        path: PathPlannerPath = PathPlannerPath.fromPathFile("temp")
         path_follower_command:Command = AutoBuilder.followPath(path)
         command_group = SequentialCommandGroup()
         command_group.addCommands(path_follower_command)

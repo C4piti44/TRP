@@ -13,14 +13,14 @@ class IntakeConstants:
 class ConveyanceConstants:
     topMotorID = 11
     bottomMotorID = 12
-    moveForwardPower = 0.5
-    moveBackwardsPower = -0.5
+    moveForwardPower = 0.75
+    moveBackwardsPower = -0.75
 
 
 class ShooterConstants:
     leftMotorID = 10
     rightMotorID = 9
-    shootPower = 0.85
+    shootPower = 0.95
 
 
 class ModuleConstants:

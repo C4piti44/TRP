@@ -1,4 +1,3 @@
-import wpilib
 from wpimath import filter
 from wpimath.geometry import Pose2d, Rotation2d, Translation2d
 from wpimath.kinematics import SwerveDrive4Kinematics, ChassisSpeeds
@@ -7,12 +6,13 @@ from wpimath.estimator import SwerveDrive4PoseEstimator
 from Constants import DriveConstants, OIConstants
 from wpimath.geometry import Rotation2d
 from Subsytem.SwerveModule import SwerveModule
+from navx import AHRS
 
 
 class SwerveSubsystem(Subsystem):
     def __init__(self) -> None:
         self.autoCSpeed: ChassisSpeeds = ChassisSpeeds(0, 0, 0)
-        self.gyro = wpilib.ADXRS450_Gyro()
+        self.gyro = AHRS.create_i2c()
         self.zeroHeading()
 
         self.xLimiter = filter.SlewRateLimiter(
@@ -80,7 +80,7 @@ class SwerveSubsystem(Subsystem):
         self.gyro.reset()
 
     def getHeading(self) -> float:
-        angle = self.gyro.getAngle() % 360
+        angle = self.gyro.getYaw() % 360
         return 360 - angle
 
     def getRotation2d(self) -> Rotation2d:
