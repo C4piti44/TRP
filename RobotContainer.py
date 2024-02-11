@@ -100,7 +100,7 @@ class RobotContainer:
         )
 
         path: PathPlannerPath = PathPlannerPath.fromPathFile("temp")
-        path_follower_command:Command = AutoBuilder.followPath(path)
+        path_follower_command: Command = AutoBuilder.followPath(path)
         command_group = SequentialCommandGroup()
         command_group.addCommands(path_follower_command)
 
