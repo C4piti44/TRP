@@ -1,4 +1,4 @@
-from commands2 import Command, SequentialCommandGroup
+from commands2 import Command, SequentialCommandGroup, command
 from Constants import (
     OIConstants,
     DriveConstants,
@@ -13,6 +13,7 @@ import commands2.cmd
 import commands2.button
 import wpilib
 from pathplannerlib.path import PathPlannerPath
+from pathplannerlib.commands import FollowPathHolonomic
 from pathplannerlib.config import (
     HolonomicPathFollowerConfig,
     PIDConstants,
@@ -82,26 +83,31 @@ class RobotContainer:
 
     def get_autonomous_command(self) -> Command:
         config: HolonomicPathFollowerConfig = HolonomicPathFollowerConfig(
-            PIDConstants(0.1, 0, 0),
-            PIDConstants(0.1, 0, 0),
-            DriveConstants.swerve_max_speed,
-            ModuleConstants.kWheelDiameterMeters / 2,
+            PIDConstants(0.5, 0, 0),
+            PIDConstants(0.5, 0, 0),
+            3,
+            0.48,
             ReplanningConfig(),
         )
 
-        AutoBuilder.configureHolonomic(
+        path: PathPlannerPath = PathPlannerPath.fromPathFile("temp")
+        path_follower_command: Command = FollowPathHolonomic(
+            path,
             self.swerveSubsystem.getPose,
-            self.swerveSubsystem.resetOdometry,
             self.swerveSubsystem.getCSpeed,
-            self.swerveSubsystem.updateAutoCSpeed,
+            self.swerveSubsystem.autoDrive,
             config,
             self.shouldFlipAutoPath,
             self.swerveSubsystem,
         )
-
-        path: PathPlannerPath = PathPlannerPath.fromPathFile("temp")
-        path_follower_command: Command = AutoBuilder.followPath(path)
         command_group = SequentialCommandGroup()
+        command_group.addCommands(
+            commands2.InstantCommand(
+                lambda: self.swerveSubsystem.resetOdometry(
+                    self.swerveSubsystem.getPose()
+                )
+            )
+        )
         command_group.addCommands(path_follower_command)
 
         return command_group

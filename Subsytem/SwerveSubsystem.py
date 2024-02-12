@@ -11,7 +11,9 @@ from navx import AHRS
 
 class SwerveSubsystem(Subsystem):
     def __init__(self) -> None:
-        self.autoCSpeed: ChassisSpeeds = ChassisSpeeds(0, 0, 0)
+        self.autoCSpeed: ChassisSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(
+            0, 0, 0, Rotation2d.fromDegrees(0)
+        )
         self.gyro = AHRS.create_i2c()
         self.zeroHeading()
 
@@ -87,6 +89,7 @@ class SwerveSubsystem(Subsystem):
         return Rotation2d.fromDegrees(self.getHeading())
 
     def getPose(self) -> Pose2d:
+        self.periodic()
         return self.odometer.getEstimatedPosition()
 
     def resetOdometry(self, pose: Pose2d) -> None:
@@ -115,6 +118,7 @@ class SwerveSubsystem(Subsystem):
         self.frontRight.setDesiredState(desiredStates[0], True)
         self.backLeft.setDesiredState(desiredStates[1], True)
         self.backRight.setDesiredState(desiredStates[2], True)
+        self.periodic()
 
     def drive(
         self, xSpeed: float, ySpeed: float, tSpeed: float, fieldOriented: bool = True
@@ -131,18 +135,17 @@ class SwerveSubsystem(Subsystem):
         else:
             cSpeed = ChassisSpeeds(xSpeed, ySpeed, tSpeed)
 
-        self.autoCSpeed = ChassisSpeeds(xSpeed, ySpeed, tSpeed)
-
         moduleState = DriveConstants.kDriveKinematics.toSwerveModuleStates(
             cSpeed, Translation2d()
         )
         self.setModuleStates(moduleState)
 
-    def autoDrive(self, speed: ChassisSpeeds):
+    def autoDrive(self, speed: ChassisSpeeds) -> None:
         moduleState = DriveConstants.kDriveKinematics.toSwerveModuleStates(
             speed, Translation2d()
         )
         self.setModuleStates(moduleState)
+        self.autoCSpeed = speed
 
     def getCSpeed(self) -> ChassisSpeeds:
         return self.autoCSpeed
