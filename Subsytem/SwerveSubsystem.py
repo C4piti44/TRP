@@ -7,6 +7,13 @@ from Constants import DriveConstants, OIConstants
 from wpimath.geometry import Rotation2d
 from Subsytem.SwerveModule import SwerveModule
 from navx import AHRS
+from pathplannerlib.config import (
+    HolonomicPathFollowerConfig,
+    PIDConstants,
+    ReplanningConfig,
+)
+from pathplannerlib.auto import AutoBuilder
+import wpilib
 
 
 class SwerveSubsystem(Subsystem):
@@ -78,6 +85,28 @@ class SwerveSubsystem(Subsystem):
             Pose2d(),
         )
 
+        AutoBuilder.configureHolonomic(
+            self.getPose,  # Robot pose supplier
+            self.resetOdometry,  # Method to reset odometry (will be called if your auto has a starting pose)
+            self.getCSpeed,  # ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            self.autoDrive,  # Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            HolonomicPathFollowerConfig(  # HolonomicPathFollowerConfig, this should likely live in your Constants class
+                PIDConstants(5.0, 0.0, 0.0),  # Translation PID constants
+                PIDConstants(5.0, 0.0, 0.0),  # Rotation PID constants
+                DriveConstants.swerve_max_speed,  # Max module speed, in m/s
+                0.4,  # Drive base radius in meters. Distance from robot center to furthest module.
+                ReplanningConfig(),  # Default path replanning config. See the API for the options here
+            ),
+            self.shouldFlipPath,  # Supplier to control path flipping based on alliance color
+            self,  # Reference to this subsystem to set requirements
+        )
+
+    def shouldFlipPath(self):
+        # Boolean supplier that controls when the path will be mirrored for the red alliance
+        # This will flip the path being followed to the red side of the field.
+        # THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+        return wpilib.DriverStation.getAlliance() == wpilib.DriverStation.Alliance.kRed
+
     def zeroHeading(self) -> None:
         self.gyro.reset()
 
@@ -112,13 +141,12 @@ class SwerveSubsystem(Subsystem):
 
     def setModuleStates(self, desiredStates) -> None:
         SwerveDrive4Kinematics.desaturateWheelSpeeds(
-            desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond
+            desiredStates, DriveConstants.swerve_max_speed
         )
         self.frontLeft.setDesiredState(desiredStates[3], True)
         self.frontRight.setDesiredState(desiredStates[0], True)
         self.backLeft.setDesiredState(desiredStates[1], True)
         self.backRight.setDesiredState(desiredStates[2], True)
-        self.periodic()
 
     def drive(
         self, xSpeed: float, ySpeed: float, tSpeed: float, fieldOriented: bool = True
@@ -141,15 +169,17 @@ class SwerveSubsystem(Subsystem):
         self.setModuleStates(moduleState)
 
     def autoDrive(self, speed: ChassisSpeeds) -> None:
+        temp = ChassisSpeeds.fromRobotRelativeSpeeds(speed, self.getRotation2d())
         moduleState = DriveConstants.kDriveKinematics.toSwerveModuleStates(
-            speed, Translation2d()
+            temp, Translation2d()
         )
         self.setModuleStates(moduleState)
-        self.autoCSpeed = speed
 
     def getCSpeed(self) -> ChassisSpeeds:
-        return self.autoCSpeed
-
-    def updateAutoCSpeed(self, speed: ChassisSpeeds) -> None:
-        self.autoCSpeed = speed
-        self.autoDrive(speed)
+        module_states = [
+            self.frontLeft.getState(),
+            self.frontRight.getState(),
+            self.backRight.getState(),
+            self.backLeft.getState(),
+        ]
+        return DriveConstants.kDriveKinematics.toChassisSpeeds(module_states)

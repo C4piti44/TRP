@@ -4,23 +4,41 @@ import math
 from wpimath.trajectory import TrapezoidProfileRadians
 
 
+class LimeLightConstants:
+    limelight_height = 1.6
+    limelight_angle = 23.1
+    target_height = 2
+
+
+class angulatorConstants:
+    left_motor_id = 15
+    right_motor_id = 14
+    angle_of_amp = 65
+    general_angle_speaker = 30
+    kP = 0.01
+    kI = 0
+    kD = 0
+    gear_ratio = 80 * (60 / 22)
+    conversion_factor = 360 / gear_ratio
+
+
 class IntakeConstants:
     motorID = 13
-    intakePower = 0.5
-    outtakePower = -0.5
+    intakePower = -0.95
+    outtakePower = 0.95
 
 
 class ConveyanceConstants:
     topMotorID = 11
     bottomMotorID = 12
-    moveForwardPower = 0.9
-    moveBackwardsPower = -0.9
+    moveForwardPower = 0.8
+    moveBackwardsPower = -0.6
 
 
 class ShooterConstants:
     leftMotorID = 10
     rightMotorID = 9
-    shootPower = 0.95
+    shootPower = 1
 
 
 class ModuleConstants:
@@ -75,7 +93,7 @@ class DriveConstants:
     kFrontLeftDriveEncoderReversed = False
     kFrontLeftDriveAbsoluteEncoderPort = 9
     kFrontLeftDriveAbsoluteEncoderReversed = False
-    kFrontLeftDriveAbsoluteEncoderOffset = 208.125
+    kFrontLeftDriveAbsoluteEncoderOffset = 35.42
 
     # FrontRight
     kFrontRightDriveMotorPort = 7
@@ -84,7 +102,7 @@ class DriveConstants:
     kFrontRightDriveEncoderReversed = False
     kFrontRightDriveAbsoluteEncoderPort = 12
     kFrontRightDriveAbsoluteEncoderReversed = False
-    kFrontRightDriveAbsoluteEncoderOffset = 100.195
+    kFrontRightDriveAbsoluteEncoderOffset = 279.316
 
     # BackLeft
     kBackLeftDriveMotorPort = 3
@@ -93,7 +111,7 @@ class DriveConstants:
     kBackLeftDriveEncoderReversed = False
     kBackLeftDriveAbsoluteEncoderPort = 10
     kBackLeftDriveAbsoluteEncoderReversed = False
-    kBackLeftDriveAbsoluteEncoderOffset = 330.820
+    kBackLeftDriveAbsoluteEncoderOffset = 325.723 - 180
     # BackRight
     kBackRightDriveMotorPort = 5
     kBackRightTurningMotorPort = 6
@@ -101,7 +119,7 @@ class DriveConstants:
     kBackRightDriveEncoderReversed = False
     kBackRightDriveAbsoluteEncoderPort = 11
     kBackRightDriveAbsoluteEncoderReversed = False
-    kBackRightDriveAbsoluteEncoderOffset = 218.936
+    kBackRightDriveAbsoluteEncoderOffset = 215.332 - 180
     kPhysicalMaxSpeedMetersPerSecond = 4.6
     kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * math.pi
 
@@ -130,7 +148,7 @@ class AutoConstants:
 
 class OIConstants:
     kDriverControllerPort = 0
-
+    kOperatorControllerPort = 1
     # stick drift values
     kStickDriftLX = 0.1
     kStickDriftLY = 0.1

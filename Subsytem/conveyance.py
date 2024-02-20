@@ -23,3 +23,10 @@ class Conveyance(commands2.Subsystem):
             return
         self.bottomMotor.set(power)
         self.topMotor.set(power)
+
+    def amp(self, tPower: float, bPower: float) -> None:
+        if abs(tPower) > 1 or abs(bPower) > 1:
+            print("Too Much Power Entered To The Conveyance Motors")
+            return
+        self.bottomMotor.set(bPower)
+        self.topMotor.set(tPower)
