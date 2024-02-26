@@ -14,6 +14,7 @@ from pathplannerlib.config import (
 )
 from pathplannerlib.auto import AutoBuilder
 import wpilib
+from Subsytem.limelight import limelight
 
 
 class SwerveSubsystem(Subsystem):
@@ -21,8 +22,10 @@ class SwerveSubsystem(Subsystem):
         self.autoCSpeed: ChassisSpeeds = ChassisSpeeds.fromRobotRelativeSpeeds(
             0, 0, 0, Rotation2d.fromDegrees(0)
         )
+        self.special_drive = False
         self.gyro = AHRS.create_i2c()
         self.zeroHeading()
+        self.nt = limelight()
 
         self.xLimiter = filter.SlewRateLimiter(
             DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond
@@ -155,6 +158,9 @@ class SwerveSubsystem(Subsystem):
         ySpeed = ySpeed if abs(ySpeed) > OIConstants.kStickDriftLY else 0.0
         tSpeed = tSpeed if abs(tSpeed) > OIConstants.kStickDriftRX else 0.0
 
+        if self.special_drive:
+            tSpeed = self.nt.auto_align()
+
         cSpeed: ChassisSpeeds
         if fieldOriented:
             cSpeed = ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -183,3 +189,6 @@ class SwerveSubsystem(Subsystem):
             self.backLeft.getState(),
         ]
         return DriveConstants.kDriveKinematics.toChassisSpeeds(module_states)
+
+    def change_drive(self, switch:bool):
+       self.special_drive = switch

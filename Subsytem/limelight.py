@@ -8,7 +8,8 @@ import math
 class limelight(Subsystem):
     def __init__(self) -> None:
         self.light = NetworkTableInstance.getDefault().getTable("limelight")
-        self.controller = PIDController(0.1, 0, 0, 0)
+        self.controller = PIDController(0.02, 0, 0, 0)
+        self.controller.enableContinuousInput(0, 360)
 
     def getX(self) -> float:
         return self.light.getEntry("tx").getDouble(0.0)
@@ -22,12 +23,21 @@ class limelight(Subsystem):
         distance = (
             LimeLightConstants.target_height - LimeLightConstants.limelight_height
         ) / math.tan(angle_to_goal_radians)
-        return distance
+        return distance + 0.4
 
     def auto_align(self) -> float:
+        if abs(self.getX()) < 1:
+            return 0
         return self.controller.calculate(self.getX())
+        
 
     def speaker_angle(self) -> float:
         d = self.distance()
-        angle = math.atan(2 / d) * (180 / math.pi)
+        print(d)
+        height = d/5
+        temp = math.atan((1.3+height) / d) * (180 / math.pi)
+        angle = (90-24)-temp
+        print(angle)
+        if angle > 60 or angle < 0:
+            return 0 
         return angle

@@ -137,7 +137,7 @@ class SwerveModule:
         ):
             self.driveMotor.set(0)
         elif is_open_loop:
-            percent_output = desired_state.speed / 3
+            percent_output = desired_state.speed 
             if abs(percent_output) > 1:
                 percent_output = abs(percent_output) / percent_output
             self.driveMotor.set(percent_output)

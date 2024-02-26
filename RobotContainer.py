@@ -31,11 +31,10 @@ class RobotContainer:
         self.intake = Intake()
         self.angulator = angulator()
         self.limelight = limelight()
-
         self.driverController = commands2.button.CommandXboxController(
             OIConstants.kDriverControllerPort
         )
-        self.operatorController = commands2.button.CommandJoystick(
+        self.operatorController = commands2.button.CommandXboxController(
             OIConstants.kOperatorControllerPort
         )
         self.swerveSubsystem.setDefaultCommand(
@@ -56,26 +55,37 @@ class RobotContainer:
             commands2.cmd.runOnce(lambda: self.swerveSubsystem.zeroHeading())
         )
 
+        self.driverController.x().onTrue(
+            commands2.cmd.runOnce(
+                lambda: self.swerveSubsystem.change_drive(True) 
+            )
+        )
+        self.driverController.x().onFalse(
+            commands2.cmd.runOnce(
+                lambda: self.swerveSubsystem.change_drive(False)
+            )
+        )
+
         # conveyance
-        self.operatorController.button(7).onTrue(
+        self.operatorController.rightBumper().onTrue(
             commands2.cmd.runOnce(
                 lambda: self.conveyance.move(ConveyanceConstants.moveForwardPower)
             )
         )
-        self.operatorController.button(7).onFalse(
+        self.operatorController.rightBumper().onFalse(
             commands2.cmd.runOnce(lambda: self.conveyance.move(0))
         )
 
-        self.operatorController.button(3).onTrue(
+        self.operatorController.leftBumper().onTrue(
             commands2.cmd.runOnce(
                 lambda: self.conveyance.move(ConveyanceConstants.moveBackwardsPower)
             )
         )
-        self.operatorController.button(3).onFalse(
+        self.operatorController.leftBumper().onFalse(
             commands2.cmd.runOnce(lambda: self.conveyance.move(0))
         )
 
-        self.operatorController.button(1).onTrue(
+        self.operatorController.leftTrigger().onTrue(
             commands2.cmd.runOnce(
                 lambda: self.conveyance.amp(
                     -ConveyanceConstants.moveForwardPower - 0.1,
@@ -83,54 +93,58 @@ class RobotContainer:
                 )
             )
         )
-        self.operatorController.button(1).onFalse(
+        self.operatorController.leftTrigger().onFalse(
             commands2.cmd.runOnce(lambda: self.conveyance.move(0))
         )
 
         # shooter
-        self.operatorController.button(4).onTrue(
+        self.operatorController.rightTrigger().onTrue(
             commands2.cmd.runOnce(
                 lambda: self.shooter.shoot(-ShooterConstants.shootPower)
             )
         )
-        self.operatorController.button(4).onFalse(
+        self.operatorController.rightTrigger().onFalse(
             commands2.cmd.runOnce(lambda: self.shooter.shoot(0))
         )
 
         # intake
-        self.operatorController.button(10).onTrue(
+        self.operatorController.povUp().onTrue(
             commands2.cmd.runOnce(lambda: self.intake.move(IntakeConstants.intakePower))
         )
-        self.operatorController.button(10).onFalse(
+        self.operatorController.povUp().onFalse(
+            commands2.cmd.runOnce(lambda: self.intake.move(0))
+        )
+        self.operatorController.povDown().onTrue(
+            commands2.cmd.runOnce(lambda: self.intake.move(-IntakeConstants.intakePower))
+        )
+        self.operatorController.povDown().onFalse(
             commands2.cmd.runOnce(lambda: self.intake.move(0))
         )
 
         # angulator
-        self.operatorController.button(12).whileTrue(
+        self.operatorController.a().onTrue(
             commands2.cmd.runOnce(
                 lambda: self.angulator.setAngle(angulatorConstants.angle_of_amp)
             )
         )
-        self.operatorController.button(12).whileFalse(
+        self.operatorController.a().onFalse(
             commands2.cmd.runOnce(lambda: self.angulator.setAngle(0))
         )
 
-        self.operatorController.button(11).whileTrue(
+        self.operatorController.y().onTrue(
             commands2.cmd.runOnce(
                 lambda: self.angulator.setAngle(self.limelight.speaker_angle())
+                #lambda: print(self.limelight.speaker_angle())
             )
         )
-
-        self.operatorController.button(11).whileFalse(
+        self.operatorController.y().onFalse(
             commands2.cmd.runOnce(lambda: self.angulator.setAngle(0))
         )
 
-        self.operatorController.button(5).whileTrue(
-            commands2.cmd.runOnce(
-                lambda: self.angulator.setAngle(angulatorConstants.angle_of_amp + 10)
-            )
+        self.operatorController.x().onTrue(
+            commands2.cmd.runOnce(lambda: self.angulator.setAngle(15))
         )
-        self.operatorController.button(5).whileFalse(
+        self.operatorController.x().onFalse(
             commands2.cmd.runOnce(lambda: self.angulator.setAngle(0))
         )
         pass

@@ -3,18 +3,17 @@ from wpimath.geometry import Translation2d
 import math
 from wpimath.trajectory import TrapezoidProfileRadians
 
-
 class LimeLightConstants:
-    limelight_height = 1.6
-    limelight_angle = 23.1
-    target_height = 2
+    limelight_height = 0.33
+    limelight_angle = 20
+    target_height = 1.32
 
 
 class angulatorConstants:
     left_motor_id = 15
     right_motor_id = 14
     angle_of_amp = 65
-    general_angle_speaker = 30
+    general_angle_speakr = 30
     kP = 0.01
     kI = 0
     kD = 0
@@ -93,7 +92,7 @@ class DriveConstants:
     kFrontLeftDriveEncoderReversed = False
     kFrontLeftDriveAbsoluteEncoderPort = 9
     kFrontLeftDriveAbsoluteEncoderReversed = False
-    kFrontLeftDriveAbsoluteEncoderOffset = 35.42
+    kFrontLeftDriveAbsoluteEncoderOffset = 35.4 - 180
 
     # FrontRight
     kFrontRightDriveMotorPort = 7
@@ -102,7 +101,7 @@ class DriveConstants:
     kFrontRightDriveEncoderReversed = False
     kFrontRightDriveAbsoluteEncoderPort = 12
     kFrontRightDriveAbsoluteEncoderReversed = False
-    kFrontRightDriveAbsoluteEncoderOffset = 279.316
+    kFrontRightDriveAbsoluteEncoderOffset = 279.316 - 180
 
     # BackLeft
     kBackLeftDriveMotorPort = 3
@@ -111,7 +110,7 @@ class DriveConstants:
     kBackLeftDriveEncoderReversed = False
     kBackLeftDriveAbsoluteEncoderPort = 10
     kBackLeftDriveAbsoluteEncoderReversed = False
-    kBackLeftDriveAbsoluteEncoderOffset = 325.723 - 180
+    kBackLeftDriveAbsoluteEncoderOffset = 325.723 
     # BackRight
     kBackRightDriveMotorPort = 5
     kBackRightTurningMotorPort = 6
@@ -119,7 +118,7 @@ class DriveConstants:
     kBackRightDriveEncoderReversed = False
     kBackRightDriveAbsoluteEncoderPort = 11
     kBackRightDriveAbsoluteEncoderReversed = False
-    kBackRightDriveAbsoluteEncoderOffset = 215.332 - 180
+    kBackRightDriveAbsoluteEncoderOffset = 215.332
     kPhysicalMaxSpeedMetersPerSecond = 4.6
     kPhysicalMaxAngularSpeedRadiansPerSecond = 2 * 2 * math.pi
 

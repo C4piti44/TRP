@@ -1,8 +1,7 @@
 import wpilib
 import commands2
 from RobotContainer import RobotContainer
-
-
+from cscore import CameraServer as CS
 class MyRobot(commands2.TimedCommandRobot):
     # robot
     def robotInit(self) -> None:
@@ -10,6 +9,7 @@ class MyRobot(commands2.TimedCommandRobot):
         self.container = RobotContainer()
         self.auto_command = self.container.get_autonomous_command()
         self.container.swerveSubsystem.zeroHeading()
+        self.camera0 = CS.startAutomaticCapture(0)
 
     def robotPeriodic(self) -> None:
         commands2.CommandScheduler.getInstance().run()

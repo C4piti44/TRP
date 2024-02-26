@@ -26,7 +26,7 @@ class angulator(Subsystem):
         CANSparkMaxUtil.set_spark_max_bus_usage(self.right_motor, Usage.kAll)
         self.right_motor.setSmartCurrentLimit(40)
         self.right_motor.setIdleMode(CANSparkMax.IdleMode.kBrake)
-        self.right_motor.setInverted(True)
+        self.right_motor.setInverted(False)
         self.right_controller.setP(angulatorConstants.kP)
         self.right_controller.setI(angulatorConstants.kI)
         self.right_controller.setD(angulatorConstants.kD)
@@ -40,14 +40,12 @@ class angulator(Subsystem):
         self.left_motor.restoreFactoryDefaults()
         CANSparkMaxUtil.set_spark_max_bus_usage(self.left_motor, Usage.kAll)
         self.left_motor.setIdleMode(CANSparkMax.IdleMode.kBrake)
-        self.left_motor.setInverted(False)
+        self.left_motor.setInverted(True)
         self.left_controller.setP(angulatorConstants.kP)
         self.left_controller.setI(angulatorConstants.kI)
         self.left_controller.setD(angulatorConstants.kD)
         self.left_controller.setFF(0)
-        self.left_encoder.setPositionConversionFactor(
-            angulatorConstants.conversion_factor
-        )
+        self.left_encoder.setPositionConversionFactor(angulatorConstants.conversion_factor)
         self.left_encoder.setPosition(0)
         self.left_motor.setOpenLoopRampRate(0.25)
         self.left_motor.enableVoltageCompensation(12)
@@ -70,4 +68,3 @@ class angulator(Subsystem):
         else:
             self.right_motor.set(0)
             self.left_motor.set(0)
-        LimeLightConstants.limelight_angle -= self.angle - self.encoder.getPosition()
