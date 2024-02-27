@@ -2,6 +2,8 @@ import wpilib
 import commands2
 from RobotContainer import RobotContainer
 from cscore import CameraServer as CS
+
+
 class MyRobot(commands2.TimedCommandRobot):
     # robot
     def robotInit(self) -> None:
@@ -10,9 +12,11 @@ class MyRobot(commands2.TimedCommandRobot):
         self.auto_command = self.container.get_autonomous_command()
         self.container.swerveSubsystem.zeroHeading()
         self.camera0 = CS.startAutomaticCapture(0)
+        self.container.swerveSubsystem.check_module_angle()
 
     def robotPeriodic(self) -> None:
         commands2.CommandScheduler.getInstance().run()
+        self.container.angulator.setAngle()
 
     # autonomus
     def autonomousInit(self) -> None:
@@ -29,7 +33,7 @@ class MyRobot(commands2.TimedCommandRobot):
             self.auto_command.cancel()
 
     def teleopPeriodic(self) -> None:
-        self.container.angulator.setAngle()
+        pass
 
     def testInit(self) -> None:
         pass

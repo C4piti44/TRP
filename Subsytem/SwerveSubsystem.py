@@ -190,5 +190,11 @@ class SwerveSubsystem(Subsystem):
         ]
         return DriveConstants.kDriveKinematics.toChassisSpeeds(module_states)
 
-    def change_drive(self, switch:bool):
-       self.special_drive = switch
+    def change_drive(self, switch: bool):
+        self.special_drive = switch
+
+    def check_module_angle(self) -> None:
+        self.frontLeft.reset_to_absolute()
+        self.frontRight.reset_to_absolute()
+        self.backLeft.reset_to_absolute()
+        self.backRight.reset_to_absolute()

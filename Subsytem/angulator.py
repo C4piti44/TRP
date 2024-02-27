@@ -45,7 +45,9 @@ class angulator(Subsystem):
         self.left_controller.setI(angulatorConstants.kI)
         self.left_controller.setD(angulatorConstants.kD)
         self.left_controller.setFF(0)
-        self.left_encoder.setPositionConversionFactor(angulatorConstants.conversion_factor)
+        self.left_encoder.setPositionConversionFactor(
+            angulatorConstants.conversion_factor
+        )
         self.left_encoder.setPosition(0)
         self.left_motor.setOpenLoopRampRate(0.25)
         self.left_motor.enableVoltageCompensation(12)
