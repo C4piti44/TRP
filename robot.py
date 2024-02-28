@@ -12,6 +12,7 @@ class MyRobot(commands2.TimedCommandRobot):
         self.auto_command = self.container.get_autonomous_command()
         self.container.swerveSubsystem.zeroHeading()
         self.camera0 = CS.startAutomaticCapture(0)
+        self.camera1 = CS.startAutomaticCapture(1)
         self.container.swerveSubsystem.check_module_angle()
 
     def robotPeriodic(self) -> None:

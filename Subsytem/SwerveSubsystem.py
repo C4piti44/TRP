@@ -112,6 +112,11 @@ class SwerveSubsystem(Subsystem):
 
     def zeroHeading(self) -> None:
         self.gyro.reset()
+        self.gyro.setAngleAdjustment(0)
+
+    def autoHeading(self, angle: float) -> None:
+        self.zeroHeading()
+        self.gyro.setAngleAdjustment(angle)
 
     def getHeading(self) -> float:
         angle = self.gyro.getYaw() % 360

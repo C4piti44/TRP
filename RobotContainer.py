@@ -159,8 +159,8 @@ class RobotContainer:
     def get_autonomous_command(self) -> Command:
         bezierPoints = PathPlannerPath.bezierFromPoses(
             [
-                Pose2d(0.94, 6.73, Rotation2d.fromDegrees(6.97)),
-                Pose2d(2.88, 7, Rotation2d.fromDegrees(130.07)),
+                Pose2d(16-0.94, 6.73, Rotation2d.fromDegrees(0)),
+                Pose2d(16-2.88, 6.73, Rotation2d.fromDegrees(0)),
             ]
         )
 
@@ -171,7 +171,7 @@ class RobotContainer:
                 3.0, 3.0, 2 * math.pi, 4 * math.pi
             ),  # The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
             GoalEndState(
-                0.0, Rotation2d.fromDegrees(-60), True
+                0.0, Rotation2d.fromDegrees(0)
             ),  # Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
             # rotationTargets
         )
@@ -180,6 +180,11 @@ class RobotContainer:
         command_group.addCommands(
             commands2.cmd.runOnce(
                 lambda: self.shooter.shoot(-ShooterConstants.shootPower)
+            )
+        )
+        command_group.addCommands(
+            commands2.cmd.runOnce(
+                lambda: self.angulator.setAngle(15)
             )
         )
         command_group.addCommands(waitCommand(1))
@@ -196,11 +201,14 @@ class RobotContainer:
         command_group.addCommands(
             commands2.InstantCommand(
                 lambda: self.swerveSubsystem.resetOdometry(
-                    Pose2d(0.94, 6.73, Rotation2d.fromDegrees(130.07))
+                    Pose2d(16-0.94, 6.73, Rotation2d.fromDegrees(60))
                 )
             )
         )
-        command_group.addCommands(path_follower_command)
+        #command_group.addCommands(path_follower_command)
+        command_group.addCommands(commands2.cmd.runOnce(lambda: self.swerveSubsystem.autoHeading(60.0)))
+        command_group.addCommands(commands2.cmd.runOnce(lambda: self.swerveSubsystem.drive(0.8, 0, 0)))
+        command_group.addCommands(waitCommand(4))
         command_group.addCommands(
             commands2.InstantCommand(lambda: self.swerveSubsystem.drive(0, 0, 0))
         )
@@ -208,5 +216,7 @@ class RobotContainer:
         command_group.addCommands(
             commands2.cmd.runOnce(lambda: self.conveyance.move(0))
         )
-
+        command_group.addCommands(
+            commands2.cmd.runOnce(lambda: self.angulator.setAngle(0))
+        )
         return command_group

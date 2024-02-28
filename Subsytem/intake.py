@@ -9,6 +9,7 @@ class Intake(Subsystem):
             IntakeConstants.motorID, CANSparkMax.MotorType.kBrushless
         )
         self.motor.setSmartCurrentLimit(20)
+        self.motor.enableVoltageCompensation(12)
 
     def move(self, power: float) -> None:
         if abs(power) > 1:

@@ -11,6 +11,10 @@ class Shooter(commands2.Subsystem):
         self.rightMotor: rev.CANSparkMax = rev.CANSparkMax(
             ShooterConstants.rightMotorID, rev.CANSparkMax.MotorType.kBrushless
         )
+        self.leftMotor.setSmartCurrentLimit(40)
+        self.rightMotor.setSmartCurrentLimit(40)
+        self.leftMotor.enableVoltageCompensation(12)
+        self.rightMotor.enableVoltageCompensation(12)
 
     def shoot(self, power: float):
         if abs(power) > 1:

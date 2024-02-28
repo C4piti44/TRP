@@ -16,6 +16,8 @@ class Conveyance(commands2.Subsystem):
 
         self.bottomMotor.setSmartCurrentLimit(20)
         self.topMotor.setSmartCurrentLimit(20)
+        self.bottomMotor.enableVoltageCompensation(12)
+        self.topMotor.enableVoltageCompensation(12)
 
     def move(self, power: float) -> None:
         if abs(power) > 1:

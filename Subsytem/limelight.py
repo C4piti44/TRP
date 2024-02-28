@@ -26,14 +26,13 @@ class limelight(Subsystem):
         return distance + 0.4
 
     def auto_align(self) -> float:
-        if abs(self.getX()) < 0.6:
+        if abs(self.getX()) < 0.1:
             return 0
         return self.controller.calculate(self.getX())
 
     def speaker_angle(self) -> float:
         d = self.distance()
         print(d)
-        height = d / 5
         temp = math.atan((1.3) / d) * (180 / math.pi)
         angle = (90 - 24) - temp
         print(angle)
